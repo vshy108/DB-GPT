@@ -9,14 +9,6 @@ from dbgpt.agent.resource.resource_plugin_api import ResourcePluginClient
 
 from ..base_agent_new import ConversableAgent
 
-try:
-    from termcolor import colored
-except ImportError:
-
-    def colored(x, *args, **kwargs):
-        return x
-
-
 logger = logging.getLogger(__name__)
 
 

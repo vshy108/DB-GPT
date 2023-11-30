@@ -34,6 +34,7 @@ from ..operators.common_operator import MapOperator
 from ..util._typing_util import _parse_bool
 from ..util.http_util import join_paths
 from .base import Trigger
+from dbgpt.util.api_utils import _check_api_key
 
 if TYPE_CHECKING:
     from fastapi import APIRouter, FastAPI

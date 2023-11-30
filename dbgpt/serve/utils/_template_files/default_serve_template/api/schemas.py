@@ -3,6 +3,8 @@ from dbgpt._private.pydantic import BaseModel, Field
 
 from ..config import SERVE_APP_NAME_HUMP
 
+from ..config import SERVE_APP_NAME_HUMP
+
 
 class ServeRequest(BaseModel):
     """{__template_app_name__hump__} request model"""

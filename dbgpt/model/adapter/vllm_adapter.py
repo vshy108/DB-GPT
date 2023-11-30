@@ -28,7 +28,6 @@ class VLLMModelAdapterWrapper(LLMModelAdapter):
 
     def model_param_class(self, model_type: str = None) -> BaseModelParameters:
         import argparse
-
         from vllm.engine.arg_utils import AsyncEngineArgs
 
         parser = argparse.ArgumentParser()

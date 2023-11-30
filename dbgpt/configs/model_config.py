@@ -98,7 +98,11 @@ LLM_MODEL_CONFIG = {
     # (Llama2 based) We only support WizardLM-13B-V1.2 for now, which is trained from Llama-2 13b, see https://huggingface.co/WizardLM/WizardLM-13B-V1.2
     "wizardlm-13b": os.path.join(MODEL_PATH, "WizardLM-13B-V1.2"),
     # wget https://huggingface.co/TheBloke/vicuna-13B-v1.5-GGUF/resolve/main/vicuna-13b-v1.5.Q4_K_M.gguf -O models/ggml-model-q4_0.gguf
-    "llama-cpp": os.path.join(MODEL_PATH, "ggml-model-q4_0.gguf"),
+    #"llama-cpp": os.path.join(MODEL_PATH, "ggml-model-q4_0.gguf"),
+    # NOTE: wget https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/resolve/main/openhermes-2.5-mistral-7b.Q4_K_M.gguf -O models/openhermes-2.5-mistral-7b.Q4_K_M.gguf
+    #"llama-cpp": os.path.join(MODEL_PATH, "openhermes-2.5-mistral-7b.Q4_K_M.gguf"),
+    # wget https://huggingface.co/TheBloke/Starling-LM-7B-alpha-GGUF/resolve/main/starling-lm-7b-alpha.Q5_K_M.gguf
+    "llama-cpp": os.path.join(MODEL_PATH, "starling-lm-7b-alpha.Q5_K_M.gguf"),
     # https://huggingface.co/internlm/internlm-chat-7b-v1_1, 7b vs 7b-v1.1: https://github.com/InternLM/InternLM/issues/288
     "internlm-7b": os.path.join(MODEL_PATH, "internlm-chat-7b"),
     "internlm-7b-8k": os.path.join(MODEL_PATH, "internlm-chat-7b-8k"),
@@ -125,6 +129,8 @@ LLM_MODEL_CONFIG = {
     "codegeex2-6b": os.path.join(MODEL_PATH, "codegeex2-6b"),
     # https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha
     "zephyr-7b-alpha": os.path.join(MODEL_PATH, "zephyr-7b-alpha"),
+    # NOTE: https://huggingface.co/HuggingFaceH4/zephyr-7b-beta
+    "zephyr-7b-beta": os.path.join(MODEL_PATH, "zephyr-7b-beta"),
     # https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1
     "mistral-7b-instruct-v0.1": os.path.join(MODEL_PATH, "Mistral-7B-Instruct-v0.1"),
     # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1
@@ -135,6 +141,14 @@ LLM_MODEL_CONFIG = {
     "solar-10.7b-instruct-v1.0": os.path.join(MODEL_PATH, "SOLAR-10.7B-Instruct-v1.0"),
     # https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca
     "mistral-7b-openorca": os.path.join(MODEL_PATH, "Mistral-7B-OpenOrca"),
+    # NOTE: https://huggingface.co/Weyaxi/OpenHermes-2.5-neural-chat-v3-3-Slerp
+    "openhermes-2.5-neural-chat-v3-3-slerp": os.path.join(MODEL_PATH, "OpenHermes-2.5-neural-chat-v3-3-Slerp"),
+    # NOTE: https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B
+    "openhermes-2.5-mistral-7b": os.path.join(MODEL_PATH, "OpenHermes-2.5-Mistral-7B"),
+    # NOTE: https://huggingface.co/berkeley-nest/Starling-LM-7B-alpha
+    "starling-lm-7b-alpha": os.path.join(MODEL_PATH, "Starling-LM-7B-alpha"),
+    # NOTE: https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0
+    "solar-10.7b-instruct-v1.0": os.path.join(MODEL_PATH, "SOLAR-10.7B-Instruct-v1.0"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-7B-V0.1
     "xwin-lm-7b-v0.1": os.path.join(MODEL_PATH, "Xwin-LM-7B-V0.1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-13B-V0.1

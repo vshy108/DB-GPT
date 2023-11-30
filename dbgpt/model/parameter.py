@@ -317,7 +317,7 @@ class ModelParameters(BaseModelParameters):
         },
     )
     cpu_offloading: Optional[bool] = field(
-        default=False, metadata={"help": "CPU offloading"}
+        default=None, metadata={"help": "CPU offloading"}
     )
     load_8bit: Optional[bool] = field(
         default=False, metadata={"help": "8-bit quantization"}
@@ -347,6 +347,7 @@ class ModelParameters(BaseModelParameters):
         default=True, metadata={"help": "Trust remote code"}
     )
     verbose: Optional[bool] = field(
+        # NOTE: disable verbose log
         default=False, metadata={"help": "Show verbose output."}
     )
 

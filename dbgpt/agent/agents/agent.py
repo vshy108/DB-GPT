@@ -155,7 +155,6 @@ class Agent:
     def reset(self) -> None:
         """(Abstract method) Reset the agent."""
 
-
 @dataclasses.dataclass
 class AgentContext:
     conv_id: str

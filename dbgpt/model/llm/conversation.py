@@ -10,7 +10,7 @@ We have integrated fastchat. For details, see: dbgpt/model/model_adapter.py
 
 import dataclasses
 from enum import IntEnum, auto
-from typing import Callable, Dict, List
+from typing import Dict, List, Dict, Callable
 
 
 class SeparatorStyle(IntEnum):
@@ -406,6 +406,20 @@ register_conv_template(
         stop_str="<eoa>",
     )
 )
+
+# OpenChat 3.5 default template
+register_conv_template(
+    Conversation(
+        name="openchat_3.5",
+        system="",
+        roles=("GPT4 Correct User", "GPT4 Correct Assistant"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.ADD_COLON_SINGLE,
+        sep="<|end_of_turn|>",
+    )
+)
+
 
 
 # TODO Support other model conversation template

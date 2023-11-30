@@ -31,6 +31,7 @@ from dbgpt.model.cluster import BaseModelController, WorkerManager, WorkerManage
 from dbgpt.rag.summary.db_summary_client import DBSummaryClient
 from dbgpt.serve.agent.agents.controller import multi_agents
 from dbgpt.serve.flow.service.service import Service as FlowService
+from dbgpt.util.api_utils import _check_api_key
 from dbgpt.util.executor_utils import (
     DefaultExecutorFactory,
     ExecutorFactory,
@@ -198,7 +199,7 @@ async def db_support_types():
     return Result[DbTypeInfo].succ(db_type_infos)
 
 
-@router.post("/v1/chat/dialogue/scenes", response_model=Result[List[ChatSceneVo]])
+@router.post("/v1/chat/dialogue/scenes", response_model=Result[List[ChatSceneVo]], dependencies=[Depends(_check_api_key)])
 async def dialogue_scenes():
     scene_vos: List[ChatSceneVo] = []
     new_modes: List[ChatScene] = [
@@ -221,7 +222,7 @@ async def dialogue_scenes():
     return Result.succ(scene_vos)
 
 
-@router.post("/v1/chat/mode/params/list", response_model=Result[dict])
+@router.post("/v1/chat/mode/params/list", response_model=Result[dict], dependencies=[Depends(_check_api_key)])
 async def params_list(chat_mode: str = ChatScene.ChatNormal.value()):
     if ChatScene.ChatWithDbQA.value() == chat_mode:
         return Result.succ(get_db_list())
@@ -239,7 +240,7 @@ async def params_list(chat_mode: str = ChatScene.ChatNormal.value()):
         return Result.succ(None)
 
 
-@router.post("/v1/chat/mode/params/file/load")
+@router.post("/v1/chat/mode/params/file/load", dependencies=[Depends(_check_api_key)])
 async def params_load(
     conv_uid: str,
     chat_mode: str,
@@ -314,7 +315,7 @@ async def get_chat_instance(dialogue: ConversationVo = Body()) -> BaseChat:
     return chat
 
 
-@router.post("/v1/chat/prepare")
+@router.post("/v1/chat/prepare", dependencies=[Depends(_check_api_key)])
 async def chat_prepare(dialogue: ConversationVo = Body()):
     # dialogue.model_name = CFG.LLM_MODEL
     logger.info(f"chat_prepare:{dialogue}")
@@ -326,7 +327,7 @@ async def chat_prepare(dialogue: ConversationVo = Body()):
     return Result.succ(resp)
 
 
-@router.post("/v1/chat/completions")
+@router.post("/v1/chat/completions", dependencies=[Depends(_check_api_key)])
 async def chat_completions(
     dialogue: ConversationVo = Body(),
     flow_service: FlowService = Depends(get_chat_flow),
@@ -334,6 +335,8 @@ async def chat_completions(
     print(
         f"chat_completions:{dialogue.chat_mode},{dialogue.select_param},{dialogue.model_name}"
     )
+    # NOTE: allow to no model_name in request
+    dialogue.model_name = dialogue.model_name or CFG.LLM_MODEL
     headers = {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -393,8 +396,7 @@ async def chat_completions(
                 media_type="text/plain",
             )
 
-
-@router.get("/v1/model/types")
+@router.get("/v1/model/types", dependencies=[Depends(_check_api_key)])
 async def model_types(controller: BaseModelController = Depends(get_model_controller)):
     logger.info(f"/controller/model/types")
     try:

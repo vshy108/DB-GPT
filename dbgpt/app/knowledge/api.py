@@ -4,7 +4,7 @@ import shutil
 import tempfile
 from typing import List
 
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, UploadFile, Form
 
 from dbgpt._private.config import Config
 from dbgpt.app.knowledge.request.request import (
@@ -34,6 +34,7 @@ from dbgpt.rag.retriever.embedding import EmbeddingRetriever
 from dbgpt.storage.vector_store.base import VectorStoreConfig
 from dbgpt.storage.vector_store.connector import VectorStoreConnector
 from dbgpt.util.tracer import SpanType, root_tracer
+from dbgpt.util.api_utils import _check_api_key
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ router = APIRouter()
 knowledge_space_service = KnowledgeService()
 
 
-@router.post("/knowledge/space/add")
+@router.post("/knowledge/space/add", dependencies=[Depends(_check_api_key)])
 def space_add(request: KnowledgeSpaceRequest):
     print(f"/space/add params: {request}")
     try:
@@ -54,7 +55,7 @@ def space_add(request: KnowledgeSpaceRequest):
         return Result.failed(code="E000X", msg=f"space add error {e}")
 
 
-@router.post("/knowledge/space/list")
+@router.post("/knowledge/space/list", dependencies=[Depends(_check_api_key)])
 def space_list(request: KnowledgeSpaceRequest):
     print(f"/space/list params:")
     try:
@@ -63,7 +64,7 @@ def space_list(request: KnowledgeSpaceRequest):
         return Result.failed(code="E000X", msg=f"space list error {e}")
 
 
-@router.post("/knowledge/space/delete")
+@router.post("/knowledge/space/delete", dependencies=[Depends(_check_api_key)])
 def space_delete(request: KnowledgeSpaceRequest):
     print(f"/space/delete params:")
     try:
@@ -72,7 +73,7 @@ def space_delete(request: KnowledgeSpaceRequest):
         return Result.failed(code="E000X", msg=f"space list error {e}")
 
 
-@router.post("/knowledge/{space_name}/arguments")
+@router.post("/knowledge/{space_name}/arguments", dependencies=[Depends(_check_api_key)])
 def arguments(space_name: str):
     print(f"/knowledge/space/arguments params:")
     try:
@@ -81,7 +82,7 @@ def arguments(space_name: str):
         return Result.failed(code="E000X", msg=f"space list error {e}")
 
 
-@router.post("/knowledge/{space_name}/argument/save")
+@router.post("/knowledge/{space_name}/argument/save", dependencies=[Depends(_check_api_key)])
 def arguments_save(space_name: str, argument_request: SpaceArgumentRequest):
     print(f"/knowledge/space/argument/save params:")
     try:
@@ -92,7 +93,7 @@ def arguments_save(space_name: str, argument_request: SpaceArgumentRequest):
         return Result.failed(code="E000X", msg=f"space list error {e}")
 
 
-@router.post("/knowledge/{space_name}/document/add")
+@router.post("/knowledge/{space_name}/document/add", dependencies=[Depends(_check_api_key)])
 def document_add(space_name: str, request: KnowledgeDocumentRequest):
     print(f"/document/add params: {space_name}, {request}")
     try:
@@ -106,7 +107,7 @@ def document_add(space_name: str, request: KnowledgeDocumentRequest):
         return Result.failed(code="E000X", msg=f"document add error {e}")
 
 
-@router.get("/knowledge/document/chunkstrategies")
+@router.get("/knowledge/document/chunkstrategies", dependencies=[Depends(_check_api_key)])
 def chunk_strategies():
     """Get chunk strategies"""
     print(f"/document/chunkstrategies:")
@@ -139,7 +140,7 @@ def chunk_strategies():
         return Result.failed(code="E000X", msg=f"chunk strategies error {e}")
 
 
-@router.post("/knowledge/{space_name}/document/list")
+@router.post("/knowledge/{space_name}/document/list", dependencies=[Depends(_check_api_key)])
 def document_list(space_name: str, query_request: DocumentQueryRequest):
     print(f"/document/list params: {space_name}, {query_request}")
     try:
@@ -150,7 +151,7 @@ def document_list(space_name: str, query_request: DocumentQueryRequest):
         return Result.failed(code="E000X", msg=f"document list error {e}")
 
 
-@router.post("/knowledge/{space_name}/document/delete")
+@router.post("/knowledge/{space_name}/document/delete", dependencies=[Depends(_check_api_key)])
 def document_delete(space_name: str, query_request: DocumentQueryRequest):
     print(f"/document/list params: {space_name}, {query_request}")
     try:
@@ -161,7 +162,7 @@ def document_delete(space_name: str, query_request: DocumentQueryRequest):
         return Result.failed(code="E000X", msg=f"document list error {e}")
 
 
-@router.post("/knowledge/{space_name}/document/upload")
+@router.post("/knowledge/{space_name}/document/upload", dependencies=[Depends(_check_api_key)])
 async def document_upload(
     space_name: str,
     doc_name: str = Form(...),
@@ -213,7 +214,7 @@ async def document_upload(
         return Result.failed(code="E000X", msg=f"document add error {e}")
 
 
-@router.post("/knowledge/{space_name}/document/sync")
+@router.post("/knowledge/{space_name}/document/sync", dependencies=[Depends(_check_api_key)])
 def document_sync(space_name: str, request: DocumentSyncRequest):
     logger.info(f"Received params: {space_name}, {request}")
     try:
@@ -225,7 +226,7 @@ def document_sync(space_name: str, request: DocumentSyncRequest):
         return Result.failed(code="E000X", msg=f"document sync error {e}")
 
 
-@router.post("/knowledge/{space_name}/document/sync_batch")
+@router.post("/knowledge/{space_name}/document/sync_batch", dependencies=[Depends(_check_api_key)])
 def batch_document_sync(space_name: str, request: List[KnowledgeSyncRequest]):
     logger.info(f"Received params: {space_name}, {request}")
     try:
@@ -237,7 +238,7 @@ def batch_document_sync(space_name: str, request: List[KnowledgeSyncRequest]):
         return Result.failed(code="E000X", msg=f"document sync error {e}")
 
 
-@router.post("/knowledge/{space_name}/chunk/list")
+@router.post("/knowledge/{space_name}/chunk/list", dependencies=[Depends(_check_api_key)])
 def document_list(space_name: str, query_request: ChunkQueryRequest):
     print(f"/document/list params: {space_name}, {query_request}")
     try:
@@ -246,7 +247,7 @@ def document_list(space_name: str, query_request: ChunkQueryRequest):
         return Result.failed(code="E000X", msg=f"document chunk list error {e}")
 
 
-@router.post("/knowledge/{vector_name}/query")
+@router.post("/knowledge/{vector_name}/query", dependencies=[Depends(_check_api_key)])
 def similar_query(space_name: str, query_request: KnowledgeQueryRequest):
     print(f"Received params: {space_name}, {query_request}")
     embedding_factory = CFG.SYSTEM_APP.get_component(
@@ -273,7 +274,7 @@ def similar_query(space_name: str, query_request: KnowledgeQueryRequest):
     return {"response": res}
 
 
-@router.post("/knowledge/document/summary")
+@router.post("/knowledge/document/summary", dependencies=[Depends(_check_api_key)])
 async def document_summary(request: DocumentSummaryRequest):
     print(f"/document/summary params: {request}")
     try:
@@ -305,7 +306,7 @@ async def document_summary(request: DocumentSummaryRequest):
         return Result.failed(code="E000X", msg=f"document summary error {e}")
 
 
-@router.post("/knowledge/entity/extract")
+@router.post("/knowledge/entity/extract", dependencies=[Depends(_check_api_key)])
 async def entity_extract(request: EntityExtractRequest):
     logger.info(f"Received params: {request}")
     try:
