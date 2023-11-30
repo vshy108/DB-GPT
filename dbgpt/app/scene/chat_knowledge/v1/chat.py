@@ -9,6 +9,9 @@ from dbgpt.app.knowledge.document_db import (
     KnowledgeDocumentDao,
     KnowledgeDocumentEntity,
 )
+
+# NOTE: the import is required for register the chat_knowledge scene
+# from dbgpt.app.scene.chat_knowledge.v1.prompt import prompt
 from dbgpt.app.knowledge.service import KnowledgeService
 from dbgpt.app.scene import BaseChat, ChatScene
 from dbgpt.component import ComponentType
@@ -107,18 +110,19 @@ class ChatKnowledge(BaseChat):
             last_output = output
             yield output
 
-        if (
-            CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS
-            and last_output
-            and type(self.relations) == list
-            and len(self.relations) > 0
-            and hasattr(last_output, "text")
-        ):
-            last_output.text = (
-                last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
-            )
-        reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
-        last_output = last_output + reference
+        # NOTE: remove reference info
+        if CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS:
+            if (
+                last_output
+                and type(self.relations) == list
+                and len(self.relations) > 0
+                and hasattr(last_output, "text")
+            ):
+                last_output.text = (
+                    last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
+                )
+            reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
+            last_output = last_output + reference
         yield last_output
 
     def stream_call_reinforce_fn(self, text):
@@ -161,14 +165,16 @@ class ChatKnowledge(BaseChat):
                     self.chunks_with_score.append((chucks[0], chunk.score))
 
             context = "\n".join([doc.content for doc in candidates_with_scores])
-        self.relations = list(
-            set(
-                [
-                    os.path.basename(str(d.metadata.get("source", "")))
-                    for d in candidates_with_scores
-                ]
+
+        if CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS:
+            self.relations = list(
+                set(
+                    [
+                        os.path.basename(str(d.metadata.get("source", "")))
+                        for d in candidates_with_scores
+                    ]
+                )
             )
-        )
         input_values = {
             "context": context,
             "question": self.current_user_input,

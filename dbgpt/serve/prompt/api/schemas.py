@@ -2,6 +2,7 @@
 from typing import Optional
 
 from dbgpt._private.pydantic import BaseModel, Field
+from ..config import SERVE_APP_NAME_HUMP
 
 from ..config import SERVE_APP_NAME_HUMP
 

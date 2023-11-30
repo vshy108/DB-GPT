@@ -2,7 +2,6 @@ from contextlib import contextmanager
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
 from sqlalchemy.orm.session import Session
-
 from dbgpt.util.pagination_utils import PaginationResult
 
 from .db_manager import BaseQuery, DatabaseManager, db
@@ -23,7 +22,6 @@ class BaseDao(Generic[T, REQ, RES]):
 
     Examples:
         .. code-block:: python
-
             class UserDao(BaseDao):
                 def get_user_by_name(self, name: str) -> User:
                     with self.session() as session:

@@ -20,9 +20,9 @@ def initialize_components(
     embedding_model_path: str,
 ):
     # Lazy import to avoid high time cost
+    from dbgpt.model.cluster.controller.controller import controller
     from dbgpt.app.initialization.embedding_component import _initialize_embedding_model
     from dbgpt.app.initialization.serve_initialization import register_serve_apps
-    from dbgpt.model.cluster.controller.controller import controller
 
     # Register global default executor factory first
     system_app.register(

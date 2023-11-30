@@ -297,7 +297,8 @@ class WebServerParameters(BaseParameters):
         },
     )
     disable_alembic_upgrade: Optional[bool] = field(
-        default=False,
+        # NOTE: if False, it will generate all tables that was defined
+        default=True,
         metadata={
             "help": "Whether to disable alembic to initialize and upgrade database metadata",
         },

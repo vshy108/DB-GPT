@@ -29,6 +29,9 @@ from dbgpt.model.parameter import (
 if TYPE_CHECKING:
     from dbgpt.app.chat_adapter import BaseChatAdpter
 
+if TYPE_CHECKING:
+    from dbgpt.app.chat_adapter import BaseChatAdpter
+
 logger = logging.getLogger(__name__)
 
 CFG = Config()

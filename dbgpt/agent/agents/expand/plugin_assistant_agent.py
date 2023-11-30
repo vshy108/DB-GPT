@@ -14,14 +14,6 @@ from ...plugin.loader import PluginLoader
 from ..agent import Agent, AgentContext
 from ..base_agent import ConversableAgent
 
-try:
-    from termcolor import colored
-except ImportError:
-
-    def colored(x, *args, **kwargs):
-        return x
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -98,6 +90,7 @@ class PluginAssistantAgent(ConversableAgent):
         )
 
     async def a_system_fill_param(self):
+        # TODO no db_connect attribute
         params = {
             "tool_list": self.plugin_generator.generate_commands_string(),
         }
