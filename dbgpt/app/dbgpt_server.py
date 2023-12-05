@@ -173,7 +173,8 @@ def initialize_app(param: WebServerParameters = None, args: List[str] = None):
         )
         CFG.SERVER_LIGHT_MODE = True
 
-    mount_static_files(app)
+    # NOTE: disable web app
+    # mount_static_files(app)
     return param
 
 

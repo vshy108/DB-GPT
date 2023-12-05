@@ -22,7 +22,8 @@ def _clear_torch_cache(device="cuda"):
 
     gc.collect()
     if device != "cpu":
-        if torch.has_mps:
+        # NOTE: if torch.has_mps: is deprecated
+        if torch.backends.mps.is_built():
             try:
                 from torch.mps import empty_cache
 
@@ -80,5 +81,6 @@ def _get_current_cuda_memory() -> List[GPUInfo]:
                 )
         return gpu_infos
     else:
-        logger.warn("CUDA is not available.")
+        # NOTE: disable log that will display in chat completion
+        # logger.warn("CUDA is not available.")
         return []
