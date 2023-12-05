@@ -35,9 +35,10 @@ from dbgpt.app.scene import BaseChat, ChatScene, ChatFactory
 from dbgpt.core.interface.message import OnceConversation
 from dbgpt.configs.model_config import KNOWLEDGE_UPLOAD_ROOT_PATH
 from dbgpt.rag.summary.db_summary_client import DBSummaryClient
-from dbgpt.storage.chat_history.chat_hisotry_factory import ChatHistory
+from dbgpt.storage.chat_history.chat_hisotry_factory import ChatHistoryy
 from dbgpt.model.cluster import BaseModelController, WorkerManager, WorkerManagerFactory
 from dbgpt.model.base import FlatSupportedModel
+from dbgpt.util.api_utils import _check_api_key
 from dbgpt.util.tracer import root_tracer, SpanType
 from dbgpt.util.executor_utils import (
     ExecutorFactory,
@@ -147,24 +148,24 @@ def get_executor() -> Executor:
     ).create()
 
 
-@router.get("/v1/chat/db/list", response_model=Result[DBConfig])
-async def db_connect_list():
-    return Result.succ(CFG.LOCAL_DB_MANAGE.get_db_list())
+# @router.get("/v1/chat/db/list", response_model=Result[DBConfig])
+# async def db_connect_list():
+#     return Result.succ(CFG.LOCAL_DB_MANAGE.get_db_list())
 
 
-@router.post("/v1/chat/db/add", response_model=Result[bool])
-async def db_connect_add(db_config: DBConfig = Body()):
-    return Result.succ(CFG.LOCAL_DB_MANAGE.add_db(db_config))
+# @router.post("/v1/chat/db/add", response_model=Result[bool])
+# async def db_connect_add(db_config: DBConfig = Body()):
+#     return Result.succ(CFG.LOCAL_DB_MANAGE.add_db(db_config))
 
 
-@router.post("/v1/chat/db/edit", response_model=Result[bool])
-async def db_connect_edit(db_config: DBConfig = Body()):
-    return Result.succ(CFG.LOCAL_DB_MANAGE.edit_db(db_config))
+# @router.post("/v1/chat/db/edit", response_model=Result[bool])
+# async def db_connect_edit(db_config: DBConfig = Body()):
+#     return Result.succ(CFG.LOCAL_DB_MANAGE.edit_db(db_config))
 
 
-@router.post("/v1/chat/db/delete", response_model=Result[bool])
-async def db_connect_delete(db_name: str = None):
-    return Result.succ(CFG.LOCAL_DB_MANAGE.delete_db(db_name))
+# @router.post("/v1/chat/db/delete", response_model=Result[bool])
+# async def db_connect_delete(db_name: str = None):
+#     return Result.succ(CFG.LOCAL_DB_MANAGE.delete_db(db_name))
 
 
 async def async_db_summary_embedding(db_name, db_type):
@@ -172,35 +173,34 @@ async def async_db_summary_embedding(db_name, db_type):
     db_summary_client.db_summary_embedding(db_name, db_type)
 
 
-@router.post("/v1/chat/db/test/connect", response_model=Result[bool])
-async def test_connect(db_config: DBConfig = Body()):
-    try:
-        # TODO Change the synchronous call to the asynchronous call
-        CFG.LOCAL_DB_MANAGE.test_connect(db_config)
-        return Result.succ(True)
-    except Exception as e:
-        return Result.failed(code="E1001", msg=str(e))
+# @router.post("/v1/chat/db/test/connect", response_model=Result[bool])
+# async def test_connect(db_config: DBConfig = Body()):
+#     try:
+#         # TODO Change the synchronous call to the asynchronous call
+#         CFG.LOCAL_DB_MANAGE.test_connect(db_config)
+#         return Result.succ(True)
+#     except Exception as e:
+#         return Result.failed(code="E1001", msg=str(e))
 
 
-@router.post("/v1/chat/db/summary", response_model=Result[bool])
-async def db_summary(db_name: str, db_type: str):
-    # TODO Change the synchronous call to the asynchronous call
-    async_db_summary_embedding(db_name, db_type)
-    return Result.succ(True)
+# @router.post("/v1/chat/db/summary", response_model=Result[bool])
+# async def db_summary(db_name: str, db_type: str):
+#     # TODO Change the synchronous call to the asynchronous call
+#     async_db_summary_embedding(db_name, db_type)
+#     return Result.succ(True)
 
 
-@router.get("/v1/chat/db/support/type", response_model=Result[DbTypeInfo])
-async def db_support_types():
-    support_types = CFG.LOCAL_DB_MANAGE.get_all_completed_types()
-    db_type_infos = []
-    for type in support_types:
-        db_type_infos.append(
-            DbTypeInfo(db_type=type.value(), is_file_db=type.is_file_db())
-        )
-    return Result[DbTypeInfo].succ(db_type_infos)
+# @router.get("/v1/chat/db/support/type", response_model=Result[DbTypeInfo])
+# async def db_support_types():
+#     support_types = CFG.LOCAL_DB_MANAGE.get_all_completed_types()
+#     db_type_infos = []
+#     for type in support_types:
+#         db_type_infos.append(
+#             DbTypeInfo(db_type=type.value(), is_file_db=type.is_file_db())
+#         )
+#     return Result[DbTypeInfo].succ(db_type_infos)
 
-
-@router.get("/v1/chat/dialogue/list", response_model=Result[ConversationVo])
+@router.get("/v1/chat/dialogue/list", response_model=Result[ConversationVo], dependencies=[Depends(_check_api_key)])
 async def dialogue_list(
     user_name: str = None, user_id: str = None, sys_code: str = None
 ):
@@ -236,8 +236,8 @@ async def dialogue_list(
 
     return Result[ConversationVo].succ(dialogues[:10])
 
-
-@router.post("/v1/chat/dialogue/scenes", response_model=Result[List[ChatSceneVo]])
+# NOTE: needed for web
+@router.post("/v1/chat/dialogue/scenes", response_model=Result[List[ChatSceneVo]], dependencies=[Depends(_check_api_key)])
 async def dialogue_scenes():
     scene_vos: List[ChatSceneVo] = []
     new_modes: List[ChatScene] = [
@@ -260,7 +260,7 @@ async def dialogue_scenes():
     return Result.succ(scene_vos)
 
 
-@router.post("/v1/chat/dialogue/new", response_model=Result[ConversationVo])
+@router.post("/v1/chat/dialogue/new", response_model=Result[ConversationVo], dependencies=[Depends(_check_api_key)])
 async def dialogue_new(
     chat_mode: str = ChatScene.ChatNormal.value(),
     user_name: str = None,
@@ -273,7 +273,7 @@ async def dialogue_new(
     return Result.succ(conv_vo)
 
 
-@router.post("/v1/chat/mode/params/list", response_model=Result[dict])
+@router.post("/v1/chat/mode/params/list", response_model=Result[dict], dependencies=[Depends(_check_api_key)])
 async def params_list(chat_mode: str = ChatScene.ChatNormal.value()):
     if ChatScene.ChatWithDbQA.value() == chat_mode:
         return Result.succ(get_db_list())
@@ -291,45 +291,45 @@ async def params_list(chat_mode: str = ChatScene.ChatNormal.value()):
         return Result.succ(None)
 
 
-@router.post("/v1/chat/mode/params/file/load")
-async def params_load(
-    conv_uid: str,
-    chat_mode: str,
-    model_name: str,
-    user_name: Optional[str] = None,
-    sys_code: Optional[str] = None,
-    doc_file: UploadFile = File(...),
-):
-    print(f"params_load: {conv_uid},{chat_mode},{model_name}")
-    try:
-        if doc_file:
-            # Save the uploaded file
-            upload_dir = os.path.join(KNOWLEDGE_UPLOAD_ROOT_PATH, chat_mode)
-            os.makedirs(upload_dir, exist_ok=True)
-            upload_path = os.path.join(upload_dir, doc_file.filename)
-            async with aiofiles.open(upload_path, "wb") as f:
-                await f.write(await doc_file.read())
+# @router.post("/v1/chat/mode/params/file/load", dependencies=[Depends(_check_api_key)])
+# async def params_load(
+#     conv_uid: str,
+#     chat_mode: str,
+#     model_name: str,
+#     user_name: Optional[str] = None,
+#     sys_code: Optional[str] = None,
+#     doc_file: UploadFile = File(...),
+# ):
+#     print(f"params_load: {conv_uid},{chat_mode},{model_name}")
+#     try:
+#         if doc_file:
+#             # Save the uploaded file
+#             upload_dir = os.path.join(KNOWLEDGE_UPLOAD_ROOT_PATH, chat_mode)
+#             os.makedirs(upload_dir, exist_ok=True)
+#             upload_path = os.path.join(upload_dir, doc_file.filename)
+#             async with aiofiles.open(upload_path, "wb") as f:
+#                 await f.write(await doc_file.read())
 
-            # Prepare the chat
-            dialogue = ConversationVo(
-                conv_uid=conv_uid,
-                chat_mode=chat_mode,
-                select_param=doc_file.filename,
-                model_name=model_name,
-                user_name=user_name,
-                sys_code=sys_code,
-            )
-            chat: BaseChat = await get_chat_instance(dialogue)
-            resp = await chat.prepare()
+#             # Prepare the chat
+#             dialogue = ConversationVo(
+#                 conv_uid=conv_uid,
+#                 chat_mode=chat_mode,
+#                 select_param=doc_file.filename,
+#                 model_name=model_name,
+#                 user_name=user_name,
+#                 sys_code=sys_code,
+#             )
+#             chat: BaseChat = await get_chat_instance(dialogue)
+#             resp = await chat.prepare()
 
-        # Refresh messages
-        return Result.succ(get_hist_messages(conv_uid))
-    except Exception as e:
-        logger.error("excel load error!", e)
-        return Result.failed(code="E000X", msg=f"File Load Error {str(e)}")
+#         # Refresh messages
+#         return Result.succ(get_hist_messages(conv_uid))
+#     except Exception as e:
+#         logger.error("excel load error!", e)
+#         return Result.failed(code="E000X", msg=f"File Load Error {str(e)}")
 
 
-@router.post("/v1/chat/dialogue/delete")
+@router.post("/v1/chat/dialogue/delete", dependencies=[Depends(_check_api_key)])
 async def dialogue_delete(con_uid: str):
     history_fac = ChatHistory()
     history_mem = history_fac.get_store_instance(con_uid)
@@ -355,7 +355,7 @@ def get_hist_messages(conv_uid: str):
     return message_vos
 
 
-@router.get("/v1/chat/dialogue/messages/history", response_model=Result[MessageVo])
+@router.get("/v1/chat/dialogue/messages/history", response_model=Result[MessageVo], dependencies=[Depends(_check_api_key)])
 async def dialogue_history_messages(con_uid: str):
     print(f"dialogue_history_messages:{con_uid}")
     # TODO Change the synchronous call to the asynchronous call
@@ -394,19 +394,19 @@ async def get_chat_instance(dialogue: ConversationVo = Body()) -> BaseChat:
     return chat
 
 
-@router.post("/v1/chat/prepare")
-async def chat_prepare(dialogue: ConversationVo = Body()):
-    # dialogue.model_name = CFG.LLM_MODEL
-    logger.info(f"chat_prepare:{dialogue}")
-    ## check conv_uid
-    chat: BaseChat = await get_chat_instance(dialogue)
-    if len(chat.history_message) > 0:
-        return Result.succ(None)
-    resp = await chat.prepare()
-    return Result.succ(resp)
+# @router.post("/v1/chat/prepare", dependencies=[Depends(_check_api_key)])
+# async def chat_prepare(dialogue: ConversationVo = Body()):
+#     # dialogue.model_name = CFG.LLM_MODEL
+#     logger.info(f"chat_prepare:{dialogue}")
+#     ## check conv_uid
+#     chat: BaseChat = await get_chat_instance(dialogue)
+#     if len(chat.history_message) > 0:
+#         return Result.succ(None)
+#     resp = await chat.prepare()
+#     return Result.succ(resp)
 
 
-@router.post("/v1/chat/completions")
+@router.post("/v1/chat/completions", dependencies=[Depends(_check_api_key)])
 async def chat_completions(dialogue: ConversationVo = Body()):
     print(
         f"chat_completions:{dialogue.chat_mode},{dialogue.select_param},{dialogue.model_name}"
@@ -435,8 +435,7 @@ async def chat_completions(dialogue: ConversationVo = Body()):
             media_type="text/plain",
         )
 
-
-@router.get("/v1/model/types")
+@router.get("/v1/model/types", dependencies=[Depends(_check_api_key)])
 async def model_types(controller: BaseModelController = Depends(get_model_controller)):
     logger.info(f"/controller/model/types")
     try:
@@ -452,14 +451,14 @@ async def model_types(controller: BaseModelController = Depends(get_model_contro
         return Result.failed(code="E000X", msg=f"controller model types error {e}")
 
 
-@router.get("/v1/model/supports")
-async def model_supports(worker_manager: WorkerManager = Depends(get_worker_manager)):
-    logger.info(f"/controller/model/supports")
-    try:
-        models = await worker_manager.supported_models()
-        return Result.succ(FlatSupportedModel.from_supports(models))
-    except Exception as e:
-        return Result.failed(code="E000X", msg=f"Fetch supportd models error {e}")
+# @router.get("/v1/model/supports")
+# async def model_supports(worker_manager: WorkerManager = Depends(get_worker_manager)):
+#     logger.info(f"/controller/model/supports")
+#     try:
+#         models = await worker_manager.supported_models()
+#         return Result.succ(FlatSupportedModel.from_supports(models))
+#     except Exception as e:
+#         return Result.failed(code="E000X", msg=f"Fetch supportd models error {e}")
 
 
 async def no_stream_generator(chat):

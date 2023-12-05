@@ -46,6 +46,9 @@ class Config(metaclass=Singleton):
         # This is a proxy server, just for test_py.  we will remove this later.
         self.proxy_api_key = os.getenv("PROXY_API_KEY")
         self.bard_proxy_api_key = os.getenv("BARD_PROXY_API_KEY")
+        
+        # NOTE: api key used for api_v1 and pilot servers
+        self.fast_api_key = os.getenv("FAST_API_KEY")
 
         # In order to be compatible with the new and old model parameter design
         if self.bard_proxy_api_key:

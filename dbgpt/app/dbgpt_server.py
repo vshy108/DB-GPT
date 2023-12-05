@@ -27,13 +27,14 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from dbgpt.app.knowledge.api import router as knowledge_router
+# NOTE: needed for web
 from dbgpt.app.prompt.api import router as prompt_router
-from dbgpt.app.llm_manage.api import router as llm_manage_api
+# from dbgpt.app.llm_manage.api import router as llm_manage_api
 
 from dbgpt.app.openapi.api_v1.api_v1 import router as api_v1
 from dbgpt.app.openapi.base import validation_exception_handler
-from dbgpt.app.openapi.api_v1.editor.api_editor_v1 import router as api_editor_route_v1
-from dbgpt.app.openapi.api_v1.feedback.api_fb_v1 import router as api_fb_v1
+# from dbgpt.app.openapi.api_v1.editor.api_editor_v1 import router as api_editor_route_v1
+# from dbgpt.app.openapi.api_v1.feedback.api_fb_v1 import router as api_fb_v1
 from dbgpt.agent.commands.disply_type.show_chart_gen import (
     static_message_img_path,
 )
@@ -79,11 +80,12 @@ app.add_middleware(
 )
 
 app.include_router(api_v1, prefix="/api", tags=["Chat"])
-app.include_router(api_editor_route_v1, prefix="/api", tags=["Editor"])
-app.include_router(llm_manage_api, prefix="/api", tags=["LLM Manage"])
-app.include_router(api_fb_v1, prefix="/api", tags=["FeedBack"])
+# app.include_router(api_editor_route_v1, prefix="/api", tags=["Editor"])
+# app.include_router(llm_manage_api, prefix="/api", tags=["LLM Manage"])
+# app.include_router(api_fb_v1, prefix="/api", tags=["FeedBack"])
 
 app.include_router(knowledge_router, tags=["Knowledge"])
+# NOTE: needed for web
 app.include_router(prompt_router, tags=["Prompt"])
 
 

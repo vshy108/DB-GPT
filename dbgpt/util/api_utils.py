@@ -2,6 +2,9 @@ from inspect import signature
 import logging
 from typing import get_type_hints, List, Type, TypeVar, Union, Optional, Tuple
 from dataclasses import is_dataclass, asdict
+from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import Depends, HTTPException
+from pilot.configs.config import Config
 
 T = TypeVar("T")
 
@@ -125,3 +128,27 @@ def _parse_response(json_response, return_type, actual_dataclass):
                 )
     else:
         return json_response
+    
+get_bearer_token = HTTPBearer(auto_error=False)
+
+async def _check_api_key(
+    auth: Optional[HTTPAuthorizationCredentials] = Depends(get_bearer_token),
+) -> str | None:
+    CFG = Config()
+    if CFG.fast_api_key:
+        if auth is None or (token := auth.credentials) != CFG.fast_api_key:
+            raise HTTPException(
+                status_code=401,
+                detail={
+                    "error": {
+                        "message": "",
+                        "type": "invalid_request_error",
+                        "param": None,
+                        "code": "invalid_api_key",
+                    }
+                },
+            )
+        return token
+    else:
+        # api_keys not set; allow all
+        return None
