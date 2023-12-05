@@ -75,19 +75,20 @@ class ChatKnowledge(BaseChat):
             last_output = output
             yield output
 
-        if (
-            CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS
-            and last_output
-            and type(relations) == list
-            and len(relations) > 0
-            and hasattr(last_output, "text")
-        ):
-            last_output.text = (
-                last_output.text + "\n\nrelations:\n\n" + ",".join(relations)
-            )
-        reference = f"\n\n{self.parse_source_view(self.sources)}"
-        last_output = last_output + reference
-        yield last_output
+        # NOTE: remove reference info
+        # if (
+        #     CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS
+        #     and last_output
+        #     and type(relations) == list
+        #     and len(relations) > 0
+        #     and hasattr(last_output, "text")
+        # ):
+        #     last_output.text = (
+        #         last_output.text + "\n\nrelations:\n\n" + ",".join(relations)
+        #     )
+        # reference = f"\n\n{self.parse_source_view(self.sources)}"
+        # last_output = last_output + reference
+        # yield last_output
 
     def stream_call_reinforce_fn(self, text):
         """return reference"""

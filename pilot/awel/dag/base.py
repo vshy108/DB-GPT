@@ -147,9 +147,11 @@ class DAGVar:
             return None
 
     @classmethod
-    def get_current_system_app(cls) -> SystemApp:
+    def get_current_system_app(cls) -> Optional[SystemApp]:
         if not cls._system_app:
-            raise RuntimeError("System APP not set for DAGVar")
+            # raise RuntimeError("System APP not set for DAGVar")
+            # 
+            return None
         return cls._system_app
 
     @classmethod

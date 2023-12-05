@@ -55,10 +55,13 @@ async def _async_heartbeat_sender(
     heartbeat_interval,
     send_heartbeat_func: SendHeartbeatFunc,
 ):
+    # TODO: how to set this when try to stop whole instance?
+    # NOTE: worker_run_data.stop_event.set() in _stop_worker of _stop_all_worker
     while not worker_run_data.stop_event.is_set():
         try:
             await send_heartbeat_func(worker_run_data)
         except Exception as e:
+            # NOTE: WARNI [pilot.model.cluster.worker.manager] Send heartbeat func error: All connection attempts failed
             logger.warn(f"Send heartbeat func error: {str(e)}")
         finally:
             await asyncio.sleep(heartbeat_interval)
