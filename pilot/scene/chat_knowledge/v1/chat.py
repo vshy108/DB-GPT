@@ -10,6 +10,8 @@ from pilot.configs.model_config import (
     EMBEDDING_MODEL_CONFIG,
 )
 
+# NOTE: the import is required for register the chat_knowledge scene
+from pilot.scene.chat_knowledge.v1.prompt import prompt
 from pilot.server.knowledge.service import KnowledgeService
 from pilot.utils.executor_utils import blocking_func_to_async
 from pilot.utils.tracer import trace
