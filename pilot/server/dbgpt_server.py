@@ -179,7 +179,7 @@ def initialize_app(param: WebWerverParameters = None, args: List[str] = None):
         CFG.SERVER_LIGHT_MODE = True
 
     # NOTE: disable web app
-    mount_static_files(app)
+    # mount_static_files(app)
     return param
 
 
