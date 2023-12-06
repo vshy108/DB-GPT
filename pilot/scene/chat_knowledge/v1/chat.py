@@ -2,20 +2,17 @@ import json
 import os
 from typing import Dict, List
 
-from pilot.component import ComponentType
 from pilot.scene.base_chat import BaseChat
 from pilot.scene.base import ChatScene
 from pilot.configs.config import Config
 
 from pilot.configs.model_config import (
-    KNOWLEDGE_UPLOAD_ROOT_PATH,
     EMBEDDING_MODEL_CONFIG,
 )
 
-from pilot.scene.chat_knowledge.v1.prompt import prompt
 from pilot.server.knowledge.service import KnowledgeService
 from pilot.utils.executor_utils import blocking_func_to_async
-from pilot.utils.tracer import root_tracer, trace
+from pilot.utils.tracer import trace
 
 CFG = Config()
 
@@ -67,12 +64,12 @@ class ChatKnowledge(BaseChat):
         self.prompt_template.template_is_strict = False
 
     async def stream_call(self):
-        input_values = await self.generate_input_values()
+        # input_values = await self.generate_input_values()
         # Source of knowledge file
-        relations = input_values.get("relations")
-        last_output = None
+        # relations = input_values.get("relations")
+        # last_output = None
         async for output in super().stream_call():
-            last_output = output
+            # last_output = output
             yield output
 
         # NOTE: remove reference info

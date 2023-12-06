@@ -82,7 +82,7 @@ def _create_model_start_listener(system_app: SystemApp):
 
     return startup_event
 
-
+# NOTE: the web server params is here
 @dataclass
 class WebWerverParameters(BaseParameters):
     host: Optional[str] = field(
