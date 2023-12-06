@@ -15,6 +15,9 @@ from dbgpt.app.knowledge.document_db import (
     KnowledgeDocumentDao,
     KnowledgeDocumentEntity,
 )
+
+# NOTE: the import is required for register the chat_knowledge scene
+# from dbgpt.app.scene.chat_knowledge.v1.prompt import prompt
 from dbgpt.app.knowledge.service import KnowledgeService
 from dbgpt.util.executor_utils import blocking_func_to_async
 from dbgpt.util.tracer import trace
