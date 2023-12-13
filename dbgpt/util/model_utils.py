@@ -30,7 +30,7 @@ def _clear_torch_cache(device="cuda"):
                 empty_cache()
             except Exception as e:
                 logger.warn(f"Clear mps torch cache error, {str(e)}")
-        elif torch.has_cuda:
+        elif torch.backends.cuda.is_built():
             device_count = torch.cuda.device_count()
             for device_id in range(device_count):
                 cuda_device = f"cuda:{device_id}"
