@@ -37,7 +37,7 @@ class DbHistoryMemory(BaseChatHistoryMemory):
             chat_history.summary = summary
             chat_history.user_name = user_name
 
-            self.chat_history_dao.update(chat_history)
+            self.chat_history_dao.raw_update(chat_history)
         except Exception as e:
             logger.error("init create conversation log error！" + str(e))
 
@@ -65,7 +65,7 @@ class DbHistoryMemory(BaseChatHistoryMemory):
         # Avoid (pymysql.err.DataError) (1406, "Data too long for column 'messages')
         #chat_history.messages = json.dumps(conversations, ensure_ascii=False)
 
-        self.chat_history_dao.update(chat_history)
+        self.chat_history_dao.raw_update(chat_history)
 
     def update(self, messages: List[OnceConversation]) -> None:
         self.chat_history_dao.update_message_by_uid(
@@ -73,7 +73,7 @@ class DbHistoryMemory(BaseChatHistoryMemory):
         )
 
     def delete(self) -> bool:
-        self.chat_history_dao.delete(self.chat_seesion_id)
+        self.chat_history_dao.raw_delete(self.chat_seesion_id)
 
     def conv_info(self, conv_uid: str = None) -> None:
         logger.info("conv_info:{}", conv_uid)
