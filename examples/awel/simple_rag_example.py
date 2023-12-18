@@ -30,7 +30,8 @@ from pilot.scene.base import ChatScene
 from pilot.openapi.api_view_model import ConversationVo
 from pilot.model.base import ModelOutput
 from pilot.model.operator.model_operator import ModelOperator
-
+# NOTE: the import is required for register the chat_knowledge scene
+from pilot.scene.chat_knowledge.v1.prompt import prompt
 
 class RequestParseOperator(MapOperator[ConversationVo, ChatContext]):
     def __init__(self, **kwargs):

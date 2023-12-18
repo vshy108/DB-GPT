@@ -9,6 +9,7 @@ import logging
 from .base import Trigger
 from ..dag.base import DAG
 from ..operator.base import BaseOperator
+from pilot.utils.api_utils import _check_api_key
 
 if TYPE_CHECKING:
     from fastapi import APIRouter, FastAPI
@@ -82,12 +83,14 @@ class HttpTrigger(Trigger):
             f"mount router function {dynamic_route_function}({function_name}), endpoint: {self._endpoint}, methods: {methods}"
         )
 
+        # NOTE: the awel route function is not stream and need to wait full request completed
         router.api_route(
             self._endpoint,
             methods=methods,
             response_model=self._response_model,
             status_code=self._status_code,
             tags=self._router_tags,
+            dependencies=[Depends(_check_api_key)]
         )(dynamic_route_function)
 
 
