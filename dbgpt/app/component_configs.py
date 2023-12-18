@@ -44,7 +44,7 @@ def initialize_components(
     )
     _initialize_model_cache(system_app)
     # NOTE: cannot disable experimental features
-    # _initialize_awel(system_app)
+    _initialize_awel(system_app)
 
 
 def _initialize_embedding_model(

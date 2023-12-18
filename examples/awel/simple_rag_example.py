@@ -29,7 +29,8 @@ from dbgpt.app.scene.operator._experimental import (
 from dbgpt.app.scene import ChatScene
 from dbgpt.app.openapi.api_view_model import ConversationVo
 from dbgpt.model.operator.model_operator import ModelOperator
-
+# NOTE: the import is required for register the chat_knowledge scene
+# from dbgpt.app.scene.chat_knowledge.v1.prompt import prompt
 
 class RequestParseOperator(MapOperator[ConversationVo, ChatContext]):
     def __init__(self, **kwargs):
