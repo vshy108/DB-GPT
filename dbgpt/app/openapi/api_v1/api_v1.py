@@ -35,7 +35,7 @@ from dbgpt.app.scene import BaseChat, ChatScene, ChatFactory
 from dbgpt.core.interface.message import OnceConversation
 from dbgpt.configs.model_config import KNOWLEDGE_UPLOAD_ROOT_PATH
 from dbgpt.rag.summary.db_summary_client import DBSummaryClient
-from dbgpt.storage.chat_history.chat_hisotry_factory import ChatHistoryy
+from dbgpt.storage.chat_history.chat_hisotry_factory import ChatHistory
 from dbgpt.model.cluster import BaseModelController, WorkerManager, WorkerManagerFactory
 from dbgpt.model.base import FlatSupportedModel
 from dbgpt.util.api_utils import _check_api_key

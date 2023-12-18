@@ -4,7 +4,7 @@ from typing import get_type_hints, List, Type, TypeVar, Union, Optional, Tuple
 from dataclasses import is_dataclass, asdict
 from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi import Depends, HTTPException
-from pilot.configs.config import Config
+from dbgpt._private.config import Config
 
 T = TypeVar("T")
 

@@ -208,6 +208,7 @@ async def test_chat_completions_with_openai_lib_async_stream(
                 messages=[{"role": "user", "content": "Hello! What is your name?"}],
                 stream=True,
             )
+        # TypeError: 'async for' requires an object with __aiter__ method, got coroutine
         async for stream_resp in res:
             stream_stream_resp = stream_resp.choices[0]["delta"].get("content", "")
 
