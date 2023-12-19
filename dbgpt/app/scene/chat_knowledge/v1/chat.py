@@ -91,16 +91,16 @@ class ChatKnowledge(BaseChat):
             yield output
 
         # NOTE: remove reference info
-        if (
-            CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS
-            and last_output
-            and type(self.relations) == list
-            and len(self.relations) > 0
-            and hasattr(last_output, "text")
-        ):
-            last_output.text = (
-                last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
-            )
+        if CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS:
+            if (
+                last_output
+                and type(self.relations) == list
+                and len(self.relations) > 0
+                and hasattr(last_output, "text")
+            ):
+                last_output.text = (
+                    last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
+                )
             reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
             last_output = last_output + reference
         yield last_output
