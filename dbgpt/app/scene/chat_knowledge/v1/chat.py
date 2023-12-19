@@ -101,8 +101,8 @@ class ChatKnowledge(BaseChat):
             last_output.text = (
                 last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
             )
-        reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
-        last_output = last_output + reference
+            reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
+            last_output = last_output + reference
         yield last_output
 
     def stream_call_reinforce_fn(self, text):
