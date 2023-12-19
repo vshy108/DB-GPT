@@ -153,14 +153,15 @@ class ChatKnowledge(BaseChat):
             context = [doc.page_content for doc, _ in candidates_with_scores]
 
         context = context[: self.max_token]
-        self.relations = list(
-            set(
-                [
-                    os.path.basename(str(d.metadata.get("source", "")))
-                    for d, _ in candidates_with_scores
-                ]
+        if CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS:
+            self.relations = list(
+                set(
+                    [
+                        os.path.basename(str(d.metadata.get("source", "")))
+                        for d, _ in candidates_with_scores
+                    ]
+                )
             )
-        )
         input_values = {
             "context": context,
             "question": self.current_user_input,
