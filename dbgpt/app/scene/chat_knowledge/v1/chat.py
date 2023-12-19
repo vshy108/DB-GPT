@@ -85,25 +85,25 @@ class ChatKnowledge(BaseChat):
             self.document_ids = [document.id for document in documents]
 
     async def stream_call(self):
-        # last_output = None
+        last_output = None
         async for output in super().stream_call():
-            # last_output = output
+            last_output = output
             yield output
 
         # NOTE: remove reference info
-        # if (
-        #     CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS
-        #     and last_output
-        #     and type(self.relations) == list
-        #     and len(self.relations) > 0
-        #     and hasattr(last_output, "text")
-        # ):
-        #     last_output.text = (
-        #         last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
-        #     )
-        # reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
-        # last_output = last_output + reference
-        # yield last_output
+        if (
+            CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS
+            and last_output
+            and type(self.relations) == list
+            and len(self.relations) > 0
+            and hasattr(last_output, "text")
+        ):
+            last_output.text = (
+                last_output.text + "\n\nrelations:\n\n" + ",".join(self.relations)
+            )
+        reference = f"\n\n{self.parse_source_view(self.chunks_with_score)}"
+        last_output = last_output + reference
+        yield last_output
 
     def stream_call_reinforce_fn(self, text):
         """return reference"""
