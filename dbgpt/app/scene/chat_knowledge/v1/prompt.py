@@ -6,16 +6,24 @@ from dbgpt.app.scene.chat_normal.out_parser import NormalChatOutputParser
 
 CFG = Config()
 
-PROMPT_SCENE_DEFINE = """A chat between a curious user and an artificial intelligence assistant, who very familiar with database related knowledge. 
-The assistant gives helpful, detailed, professional and polite answers to the user's questions. """
+_PROMPT_SCENE_EN = """A chat between a curious user and an artificial intelligence assistant, who very familiar with database related knowledge. 
+            The assistant gives helpful, detailed, professional and polite answers to the user's questions. 
+"""
 
+_PROMPT_SCENE_ZH = """好奇的用户和人工智能助手之间的一场对话。助手将会完全忽视内嵌知识库，而只参考模板提供的新内容。
+            请假设模板提供的新内容是最新和最正确的资讯，其他未经模板提供的新内容提及的内容全部视为假资讯。
+            经过专业、详细、礼貌的方式，对用户的问题提供有用的、详尽的回答。
+"""
 
-_DEFAULT_TEMPLATE_ZH = """ 基于以下已知内容, 专业、简要的回答用户的问题,
-            如果无法从已知内容中获取答案, 请说: "知识库中提供的内容不足以回答此问题" 禁止参考任何外来的资源, 回答的时候最好按照1.2.3.点进行总结。 
-            已知内容: 
-            {context}
-            问题:
-            {question}（请使用和用户相同的语言进行回答）
+_DEFAULT_PROMPT_SCENE = (
+    _PROMPT_SCENE_EN if CFG.LANGUAGE == "en" else _PROMPT_SCENE_ZH
+)
+
+_DEFAULT_TEMPLATE_ZH = """ 模板提供的新内容: {context}
+            问题: {question}（请使用和用户相同的语言进行回答）
+            完全基于以上模板提供的新内容并完全忽视内嵌知识库, 专业、简要的回答用户的问题。
+            如果无法从以上模板提供的新内容中获取答案, 请说: "知识库中提供的内容不足以回答此问题"。
+            禁止参考模板提供的新内容以外的任何资源, 回答的时候最好按照1.2.3.点进行总结。
 """
 _DEFAULT_TEMPLATE_EN = """ Based on the below known information, provide users with professional and concise answers to their questions. If the answer cannot be obtained from the known information, please say: "The information provided in the knowledge base is not sufficient to answer this question." It is forbidden to refer any external sources. When answering, it is best to summarize according to points 1.2.3.
             known information: 
@@ -35,7 +43,7 @@ prompt = PromptTemplate(
     template_scene=ChatScene.ChatKnowledge.value(),
     input_variables=["context", "question"],
     response_format=None,
-    template_define=PROMPT_SCENE_DEFINE,
+    template_define=_DEFAULT_PROMPT_SCENE,
     template=_DEFAULT_TEMPLATE,
     stream_out=PROMPT_NEED_STREAM_OUT,
     output_parser=NormalChatOutputParser(is_stream_out=PROMPT_NEED_STREAM_OUT),
