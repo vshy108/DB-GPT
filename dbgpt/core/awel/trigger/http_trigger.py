@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Union, Type, List, TYPE_CHECKING, Optional, Any, Dict
+from typing import Union, Type, List, TYPE_CHECKING, Optional, Any, Dict, Callable
 from starlette.requests import Request
 from starlette.responses import Response
 from dbgpt._private.pydantic import BaseModel
@@ -14,7 +14,8 @@ from dbgpt.util.api_utils import _check_api_key
 if TYPE_CHECKING:
     from fastapi import APIRouter, FastAPI
 
-RequestBody = Union[Request, Type[BaseModel], str]
+RequestBody = Union[Type[Request], Type[BaseModel], str]
+StreamingPredictFunc = Callable[[Union[Request, BaseModel]], bool]
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ class HttpTrigger(Trigger):
         methods: Optional[Union[str, List[str]]] = "GET",
         request_body: Optional[RequestBody] = None,
         streaming_response: Optional[bool] = False,
+        streaming_predict_func: Optional[StreamingPredictFunc] = None,
         response_model: Optional[Type] = None,
         response_headers: Optional[Dict[str, str]] = None,
         response_media_type: Optional[str] = None,
@@ -40,6 +42,7 @@ class HttpTrigger(Trigger):
         self._methods = methods
         self._req_body = request_body
         self._streaming_response = streaming_response
+        self._streaming_predict_func = streaming_predict_func
         self._response_model = response_model
         self._status_code = status_code
         self._router_tags = router_tags
@@ -60,10 +63,13 @@ class HttpTrigger(Trigger):
                 return await _parse_request_body(request, self._req_body)
 
             async def route_function(body=Depends(_request_body_dependency)):
+                streaming_response = self._streaming_response
+                if self._streaming_predict_func:
+                    streaming_response = self._streaming_predict_func(body)
                 return await _trigger_dag(
                     body,
                     self.dag,
-                    self._streaming_response,
+                    streaming_response,
                     self._response_headers,
                     self._response_media_type,
                 )
@@ -115,6 +121,7 @@ async def _trigger_dag(
     response_headers: Optional[Dict[str, str]] = None,
     response_media_type: Optional[str] = None,
 ) -> Any:
+    from fastapi import BackgroundTasks
     from fastapi.responses import StreamingResponse
 
     end_node = dag.leaf_nodes
@@ -134,8 +141,11 @@ async def _trigger_dag(
                 "Transfer-Encoding": "chunked",
             }
         generator = await end_node.call_stream(call_data={"data": body})
+        background_tasks = BackgroundTasks()
+        background_tasks.add_task(end_node.dag._after_dag_end)
         return StreamingResponse(
             generator,
             headers=headers,
             media_type=media_type,
+            background=background_tasks,
         )
