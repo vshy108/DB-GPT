@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from typing import Union, Type, List, TYPE_CHECKING, Optional, Any, Dict, Callable
+import logging
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
+
 from starlette.requests import Request
 from starlette.responses import Response
-from dbgpt._private.pydantic import BaseModel
-import logging
 
-from .base import Trigger
+from dbgpt._private.pydantic import BaseModel
+
 from ..dag.base import DAG
 from ..operator.base import BaseOperator
 from dbgpt.util.api_utils import _check_api_key
+from .base import Trigger
 
 if TYPE_CHECKING:
     from fastapi import APIRouter, FastAPI
