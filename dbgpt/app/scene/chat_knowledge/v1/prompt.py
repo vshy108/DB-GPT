@@ -6,8 +6,11 @@ from dbgpt.app.scene.chat_normal.out_parser import NormalChatOutputParser
 
 CFG = Config()
 
-_PROMPT_SCENE_EN = """A chat between a curious user and an artificial intelligence assistant, who very familiar with database related knowledge. 
-            The assistant gives helpful, detailed, professional and polite answers to the user's questions. 
+_PROMPT_SCENE_EN = """A dialogue between a curious user and an artificial intelligence assistant. 
+            The assistant will completely ignore the embedded knowledge base and only reference the new content provided by the template. 
+            Please assume that the new content provided by the template is the latest and most accurate information, and disregard any content outside of what the template provides. 
+            In a professional, detailed, and polite manner, based entirely on the new content provided by the template and ignoring the embedded knowledge base, 
+            provide the user with useful and comprehensive answers to their questions.
 """
 
 _PROMPT_SCENE_ZH = """好奇的用户和人工智能助手之间的一场对话。
@@ -20,18 +23,21 @@ _DEFAULT_PROMPT_SCENE = (
     _PROMPT_SCENE_EN if CFG.LANGUAGE == "en" else _PROMPT_SCENE_ZH
 )
 
-_DEFAULT_TEMPLATE_ZH = """ 模板提供的新内容: {context}
-            问题: 从模板提供的新内容中， {question}（请使用和用户相同的语言进行回答）
+_DEFAULT_TEMPLATE_ZH = """模板提供的新内容:
+            {context}
+            问题:
+            从模板提供的新内容中，{question}（请使用和用户相同的语言进行回答）
             完全基于以上模板提供的新内容并完全忽视内嵌知识库, 专业、简要的回答用户的问题。
             如果无法从以上模板提供的新内容中获取答案, 请说: "知识库中提供的内容不足以回答此问题"。
-            禁止参考模板提供的新内容以外的任何资源。
-            回答的时候最好按照1.2.3.点进行总结。
+            禁止参考模板提供的新内容以外的任何资源, 回答的时候最好按照1.2.3.点进行总结。
 """
-_DEFAULT_TEMPLATE_EN = """ Based on the below known information, provide users with professional and concise answers to their questions. If the answer cannot be obtained from the known information, please say: "The information provided in the knowledge base is not sufficient to answer this question." It is forbidden to refer any external sources. When answering, it is best to summarize according to points 1.2.3.
-            known information: 
+_DEFAULT_TEMPLATE_EN = """New content from the template:
             {context}
-            question:
-            {question}(when answering, use the same language as the "user")
+            question: 
+            Based on the new content provided by the template, {question} (Please answer using the same language as the user)
+            Based entirely on the new content provided by the template and completely disregarding the embedded knowledge base, provide a professional and concise answer to the user's question. 
+            If unable to obtain an answer from the new content provided by the template, please say, 'The knowledge base content is not sufficient to answer this question.' 
+            Prohibited from referencing any resources outside of the new content provided by the template, it is preferable to summarise the answer following the points 1.2.3.
 """
 
 _DEFAULT_TEMPLATE = (
