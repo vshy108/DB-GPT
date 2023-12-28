@@ -19,7 +19,7 @@ _PROMPT_SCENE_ZH = """好奇的用户和人工智能助手之间的一场对话�
             经过专业、详细、礼貌的方式，完全基于模板提供的新内容并完全忽视内嵌知识库下，对用户的问题提供有用的、详尽的回答。
 """
 
-_DEFAULT_PROMPT_SCENE = (
+PROMPT_SCENE_DEFINE = (
     _PROMPT_SCENE_EN if CFG.LANGUAGE == "en" else _PROMPT_SCENE_ZH
 )
 
@@ -51,7 +51,7 @@ prompt = PromptTemplate(
     template_scene=ChatScene.ChatKnowledge.value(),
     input_variables=["context", "question"],
     response_format=None,
-    template_define=_DEFAULT_PROMPT_SCENE,
+    template_define=PROMPT_SCENE_DEFINE,
     template=_DEFAULT_TEMPLATE,
     stream_out=PROMPT_NEED_STREAM_OUT,
     output_parser=NormalChatOutputParser(is_stream_out=PROMPT_NEED_STREAM_OUT),
