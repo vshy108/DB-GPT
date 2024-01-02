@@ -97,7 +97,10 @@ LLM_MODEL_CONFIG = {
     # (Llama2 based) We only support WizardLM-13B-V1.2 for now, which is trained from Llama-2 13b, see https://huggingface.co/WizardLM/WizardLM-13B-V1.2
     "wizardlm-13b": os.path.join(MODEL_PATH, "WizardLM-13B-V1.2"),
     # wget https://huggingface.co/TheBloke/vicuna-13B-v1.5-GGUF/resolve/main/vicuna-13b-v1.5.Q4_K_M.gguf -O models/ggml-model-q4_0.gguf
-    "llama-cpp": os.path.join(MODEL_PATH, "ggml-model-q4_0.gguf"),
+    #"llama-cpp": os.path.join(MODEL_PATH, "ggml-model-q4_0.gguf"),
+    # NOTE: wget https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/resolve/main/openhermes-2.5-mistral-7b.Q4_K_M.gguf -O models/openhermes-2.5-mistral-7b.Q4_K_M.gguf
+    # NOTE: gguf file
+    "llama-cpp": os.path.join(MODEL_PATH, "openhermes-2.5-mistral-7b.Q4_K_M.gguf"),
     # https://huggingface.co/internlm/internlm-chat-7b-v1_1, 7b vs 7b-v1.1: https://github.com/InternLM/InternLM/issues/288
     "internlm-7b": os.path.join(MODEL_PATH, "internlm-chat-7b"),
     "internlm-7b-8k": os.path.join(MODEL_PATH, "internlm-chat-7b-8k"),

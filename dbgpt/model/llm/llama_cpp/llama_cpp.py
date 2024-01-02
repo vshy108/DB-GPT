@@ -57,8 +57,9 @@ class LlamaCppModel:
         self.verbose = True
 
     def __del__(self):
-        if self.model:
-            self.model.__del__()
+        # NOTE: fix the delete issue
+        if self.model and hasattr(self.model, '_model'):
+            self.model._model.__del__()
 
     @classmethod
     def from_pretrained(self, model_path, model_params: LlamaCppModelParameters):

@@ -349,7 +349,8 @@ class ModelParameters(BaseModelParameters):
         default=True, metadata={"help": "Trust remote code"}
     )
     verbose: Optional[bool] = field(
-        default=True, metadata={"help": "Show verbose output."}
+        # NOTE: disable verbose log
+        default=False, metadata={"help": "Show verbose output."}
     )
 
 
