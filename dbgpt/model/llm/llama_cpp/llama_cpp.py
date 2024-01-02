@@ -138,11 +138,41 @@ class LlamaCppModel:
             stream=True,
             echo=echo,
             logits_processor=None,
+            #stop=["[/SYS]", "[/INST]", "[/ASSISTANT]"],
         )
 
-        output = ""
+        print(completion_chunks)
+
+        #output = ""
+        stack_output = ""
         for completion_chunk in completion_chunks:
             text = completion_chunk["choices"][0]["text"]
-            output += text
+            stack_output += text
+            print(stack_output)
+
+            sys_match = re.search(r"<<\/SYS>>(.*?)(<\/SYS>|\[\/SYS\])", stack_output, re.DOTALL)
+            inst_match = re.search(r"<<\/INST>>(.*?)(<\/INST>|\[\/INST\])", stack_output, re.DOTALL)
+            assistant_match = re.search(r"<<\/ASSISTANT>>(.*?)(<\/ASSISTANT>|\[\/ASSISTANT\])", stack_output, re.DOTALL)
+
+            if sys_match:
+                yield sys_match.group(1)
+                stack_output = ""
+                break
+
+            elif inst_match:
+                yield inst_match.group(1)
+                stack_output = ""
+                break
+
+            elif assistant_match:
+                yield assistant_match.group(1)
+                stack_output = ""
+                break
+
+            yield ""
+
+        #for completion_chunk in completion_chunks:
+            #text = completion_chunk["choices"][0]["text"]
+            #output += text
             # print(output)
-            yield output
+            #yield output
