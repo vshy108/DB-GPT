@@ -184,6 +184,7 @@ class LlamaCppModel:
             # Check if the current completion_chunk is the last one
             is_last_chunk = index == len(completion_chunks_list) - 1
             remove_spaces = r'(?<=\n)\s+'
+            tags_regex = r'[<\[][^\r\n]*[>\]]'
             last_chunk_matches = [
                 ass_match, ans_match, ai_cn_match, 
                 ren_gong_zhi_neng_square_match, sys_slash_match
@@ -193,7 +194,9 @@ class LlamaCppModel:
                 double_square_ass_match, sys_match, 
                 double_inst_match, assistant_match, ai_match,
                 ren_gong_zhi_neng_match, sys_inst_square_match,
-                inst_ai_match
+                inst_ai_match, ai_inst_match, ai_pipe_match,
+                assistant_pipe_match, assistant_cn_match,
+                inst_yonghu_match,
             ]
 
             if cannot_answer_match:
@@ -204,7 +207,7 @@ class LlamaCppModel:
             for content_match in content_matches:
                 if content_match:
                     extract_content = content_match.group(1).strip()
-                    extract_content = re.sub(r'[<\[][^\r\n]*[>\]]', '', extract_content)
+                    extract_content = re.sub(tags_regex, '', extract_content)
                     yield re.sub(remove_spaces, '', extract_content, flags=re.MULTILINE)
                     stack_output = ""
                     is_done = True
@@ -219,7 +222,7 @@ class LlamaCppModel:
                     extract_content = extract_content[2:]
                 if extract_content.endswith("']"):
                     extract_content = extract_content[:-2]
-                extract_content = re.sub(r'[<\[][^\r\n]*[>\]]', '', extract_content)
+                extract_content = re.sub(tags_regex, '', extract_content)
                 yield extract_content
                 stack_output = ""
                 break
@@ -228,14 +231,14 @@ class LlamaCppModel:
                 for last_match in last_chunk_matches:
                     if last_match:
                         extract_content = last_match.group(1).strip()
-                        extract_content = re.sub(r'[<\[][^\r\n]*[>\]]', '', extract_content)
+                        extract_content = re.sub(tags_regex, '', extract_content)
                         yield extract_content
                         stack_output = ""
                         is_done = True
                         break
                 if not is_done:
                     extract_content = stack_output
-                    extract_content = re.sub(r'[<\[][^\r\n]*[>\]]', '', extract_content)
+                    extract_content = re.sub(tags_regex, '', extract_content)
                     yield extract_content
                     stack_output = ""
                     is_done = True
