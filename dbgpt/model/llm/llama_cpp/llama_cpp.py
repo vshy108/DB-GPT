@@ -9,8 +9,17 @@ import torch
 import llama_cpp
 
 from dbgpt.model.parameter import LlamaCppModelParameters
+from dbgpt._private.config import Config
 
 logger = logging.getLogger(__name__)
+
+CFG = Config()
+
+_CANNOT_ANSWER_ZH = r'知识库中提供的内容不足以回答此问题。'
+_CANNOT_ANSWER_EN = r'The content available in the knowledge base is insufficient to answer this question.'
+CANNOT_ANSWER = (
+    _CANNOT_ANSWER_EN if CFG.LANGUAGE == "en" else _CANNOT_ANSWER_ZH
+)
 
 if torch.cuda.is_available() and not torch.version.hip:
     try:
@@ -151,7 +160,7 @@ class LlamaCppModel:
         stack_output = ""
         completion_chunks_list = list(completion_chunks)
         is_done = False
-        CANNOT_ANSWER = r'知识库中提供的内容不足以回答此问题。'
+        
         for index, completion_chunk in enumerate(completion_chunks_list):
             text = completion_chunk["choices"][0]["text"]
             stack_output += text

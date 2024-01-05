@@ -6,11 +6,10 @@ from dbgpt.app.scene.chat_normal.out_parser import NormalChatOutputParser
 
 CFG = Config()
 
-_PROMPT_SCENE_EN = """A dialogue between a curious user and an artificial intelligence assistant. 
-            The assistant will completely ignore the embedded knowledge base and only reference the new content provided by the template. 
-            Please assume that the new content provided by the template is the latest and most accurate information, and disregard any content outside of what the template provides. 
-            In a professional, detailed, and polite manner, based entirely on the new content provided by the template and ignoring the embedded knowledge base, 
-            provide the user with useful and comprehensive answers to their questions.
+_PROMPT_SCENE_EN = """A conversation between a curious user and an artificial intelligence assistant. 
+            The assistant will completely ignore the embedded knowledge base and only refer to the new content provided by the template.
+            Through a professional and polite approach, the assistant will provide useful and concise answers to user questions, solely based on the new content provided by the template, while completely disregarding the embedded knowledge base.
+            The assistant is not allowed to engage in self-questioning, self-answering, or repeating questions in responses.
 """
 
 _PROMPT_SCENE_ZH = """好奇的用户和人工智能助手之间的一场对话。
@@ -33,13 +32,14 @@ _DEFAULT_TEMPLATE_ZH = """模板提供的新内容:
             禁止参考模板提供的新内容以外的任何资源，回答的时候最好单独一句话概括所有。
 """
 
-_DEFAULT_TEMPLATE_EN = """New content from the template:
-            {context}
-            question: 
-            Based on the new content provided by the template, {question} (Please answer using the same language as the user)
-            Based entirely on the new content provided by the template and completely disregarding the embedded knowledge base, provide a professional and concise answer to the user's question. 
-            If unable to obtain an answer from the new content provided by the template, please say, 'The knowledge base content is not sufficient to answer this question.' 
-            Prohibited from referencing any resources outside of the new content provided by the template, it is preferable to summarise the answer following the points 1.2.3.
+_DEFAULT_TEMPLATE_EN = """New content provided by the template:
+{context}
+Question:
+From the new content provided by the template, {question} (please answer using the same language as the user)
+Answer the user's question entirely based on the new content provided by the template, disregarding the embedded knowledge base.
+If unable to find an answer from the new content provided by the template, please say: "The content available in the knowledge base is insufficient to answer this question"
+Otherwise, when the question is unclear, please say: "Please provide a more specific query" instead of generating new questions to ask the user.
+It is prohibited to refer to any resources outside the new content provided by the template; when responding, it is preferable to summarize everything in a single sentence.
 """
 
 _DEFAULT_TEMPLATE = (
