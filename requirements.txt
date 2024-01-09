@@ -61,7 +61,7 @@ fire==0.5.0
 flatbuffers==23.5.26
 fonttools==4.44.0
 frozenlist==1.4.0
-fschat==0.2.32
+fschat==0.2.34
 fsspec==2023.12.1
 funcparserlib==1.0.1
 future==0.18.2
@@ -217,8 +217,8 @@ threadpoolctl==3.2.0
 tiktoken==0.5.1
 tokenizers==0.15.0
 tomli==2.0.1
--e git+https://github.com/pytorch/pytorch.git@4c55dc50355d5e923642c59ad2a23d6ad54711e7#egg=torch
-torchaudio==2.1.1
+-e git+https://github.com/pytorch/pytorch.git@a8e7c98cb95ff97bb30a728c6b2a1ce6bff946eb#egg=torch
+torchaudio==2.1.2
 torchvision==0.16.1
 tqdm==4.66.1
 transformers==4.36.1
