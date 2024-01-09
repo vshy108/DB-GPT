@@ -129,8 +129,6 @@ class LLMModelAdaper:
     ):
         conv = self.get_default_conv_template(model_name, model_path)
         print(conv)
-        print(model_name)
-        print(model_path)
 
         if prompt_template:
             logger.info(f"Use prompt template {prompt_template} from config")
@@ -308,8 +306,6 @@ class FastChatLLMModelAdaperWrapper(LLMModelAdaper):
     def get_default_conv_template(
         self, model_name: str, model_path: str
     ) -> "Conversation":
-        print("FastChatLLMModelAdaperWrapper get_default_conv_template")
-        print(model_path)
         return self._adapter.get_default_conv_template(model_path)
 
     def __str__(self) -> str:
@@ -394,7 +390,6 @@ def get_conv_template(name: str) -> "Conversation":
 def _auto_get_conv_template(model_name: str, model_path: str) -> "Conversation":
     try:
         adapter = get_llm_model_adapter(model_name, model_path, use_fastchat=True)
-        print("_auto_get_conv_template get_default_conv_template")
         return adapter.get_default_conv_template(model_name, model_path)
     except Exception:
         return None
@@ -420,15 +415,12 @@ def get_llm_model_adapter(
     must_use_old = any(m in model_name for m in _OLD_MODELS)
     if use_fastchat and not must_use_old:
         logger.info("Use fastcat adapter")
-        print(model_name)
-        print(model_path)
         adapter = _get_fastchat_model_adapter(
             model_name,
             model_path,
             _fastchat_get_adapter_monkey_patch,
             use_fastchat_monkey_patch=use_fastchat_monkey_patch,
         )
-        print(adapter)
         return FastChatLLMModelAdaperWrapper(adapter)
     else:
         from dbgpt.model.adapter import (
@@ -455,19 +447,12 @@ def _get_fastchat_model_adapter(
     try:
         if use_fastchat_monkey_patch:
             model_adapter.get_model_adapter = _fastchat_get_adapter_monkey_patch
-            print(model_adapter.get_model_adapter)
-            print(1)
         thread_local.model_name = model_name
         _remove_black_list_model_of_fastchat()
-        print(2)
         if caller:
-            print(3)
             return caller(model_path)
     finally:
-        print(4)
         del thread_local.model_name
-        print(_bak_get_model_adapter)
-        print(5)
         model_adapter.get_model_adapter = _bak_get_model_adapter
 
 
