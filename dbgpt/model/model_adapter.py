@@ -303,6 +303,8 @@ class FastChatLLMModelAdaperWrapper(LLMModelAdaper):
     def get_default_conv_template(
         self, model_name: str, model_path: str
     ) -> "Conversation":
+        print("FastChatLLMModelAdaperWrapper get_default_conv_template")
+        print(model_path)
         return self._adapter.get_default_conv_template(model_path)
 
     def __str__(self) -> str:
@@ -412,12 +414,15 @@ def get_llm_model_adapter(
     must_use_old = any(m in model_name for m in _OLD_MODELS)
     if use_fastchat and not must_use_old:
         logger.info("Use fastcat adapter")
+        print(model_name)
+        print(model_path)
         adapter = _get_fastchat_model_adapter(
             model_name,
             model_path,
             _fastchat_get_adapter_monkey_patch,
             use_fastchat_monkey_patch=use_fastchat_monkey_patch,
         )
+        print(adapter)
         return FastChatLLMModelAdaperWrapper(adapter)
     else:
         from dbgpt.model.adapter import (
@@ -450,6 +455,7 @@ def _get_fastchat_model_adapter(
             return caller(model_path)
     finally:
         del thread_local.model_name
+        print(_bak_get_model_adapter)
         model_adapter.get_model_adapter = _bak_get_model_adapter
 
 
