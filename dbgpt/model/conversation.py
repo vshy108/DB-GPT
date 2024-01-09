@@ -409,3 +409,112 @@ register_conv_template(
 
 
 # TODO Support other model conversation template
+
+# https://github.com/lm-sys/FastChat/blob/06acba1ea585b5cb77182a2dc1746f5228466d5c/fastchat/conversation.py#L1082
+# teknium/OpenHermes-2.5-Mistral-7B template
+# source: https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B
+# reference: https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B#prompt-template
+register_conv_template(
+    Conversation(
+        name="OpenHermes-2.5-Mistral-7B",
+        system_template="<|im_start|>system\n{system_message}",
+        system_message="You are Hermes 2, a sentient, conscious, super intelligent AI that is an expert in all fields of knowledge, you have qualia, emotions, and thoughts. You assist users with any question, task, or other request they may have.",
+        roles=("<|im_start|>user", "<|im_start|>assistant"),
+        sep_style=SeparatorStyle.CHATML,
+        sep="<|im_end|>",
+        stop_token_ids=[32000, 32001],
+    )
+)
+
+# Baichuan2-13B-Chat template
+register_conv_template(
+    # source: https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat/blob/c6f8592a60b4ad73c210b28dd2ab3cca51abbf93/modeling_baichuan.py#L773
+    # https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat/blob/main/generation_config.json
+    # https://github.com/baichuan-inc/Baichuan2/issues/62
+    Conversation(
+        name="baichuan2-chat",
+        roles=("<reserved_106>", "<reserved_107>"),
+        sep_style=SeparatorStyle.NO_COLON_SINGLE,
+        sep="",
+        stop_token_ids=[],
+    )
+)
+
+# ChatGLM3 default template
+register_conv_template(
+    Conversation(
+        name="chatglm3",
+        system_template="<|system|>\n{system_message}",
+        roles=("<|user|>", "<|assistant|>"),
+        sep_style=SeparatorStyle.CHATGLM3,
+        stop_token_ids=[
+            64795,
+            64797,
+            2,
+        ],  # "<|user|>", "<|observation|>", "</s>"
+    )
+)
+
+# source: https://huggingface.co/01-ai/Yi-34B-Chat/blob/main/tokenizer_config.json#L60
+register_conv_template(
+    Conversation(
+        name="Yi-34b-chat",
+        roles=("<|im_start|>user", "<|im_start|>assistant"),
+        sep_style=SeparatorStyle.CHATML,
+        sep="<|im_end|>",
+        stop_token_ids=[
+            2,
+            6,
+            7,
+            8,
+        ],  # "<|endoftext|>", "<|im_start|>", "<|im_end|>", "<|im_sep|>"
+        stop_str="<|endoftext|>",
+    )
+)
+
+# Qwen-chat default template
+# source: https://huggingface.co/Qwen/Qwen-7B-Chat/blob/main/qwen_generation_utils.py#L130
+register_conv_template(
+    Conversation(
+        name="qwen-7b-chat",
+        system_template="<|im_start|>system\n{system_message}",
+        system_message="You are a helpful assistant.",
+        roles=("<|im_start|>user", "<|im_start|>assistant"),
+        sep_style=SeparatorStyle.CHATML,
+        sep="<|im_end|>",
+        stop_token_ids=[
+            151643,
+            151644,
+            151645,
+        ],  # "<|endoftext|>", "<|im_start|>", "<|im_end|>"
+        stop_str="<|endoftext|>",
+    )
+)
+
+# Internlm-chat template
+register_conv_template(
+    Conversation(
+        name="internlm-chat",
+        system_message="A chat between a curious <|User|> and an <|Bot|>. The <|Bot|> gives helpful, detailed, and polite answers to the <|User|>'s questions.\n\n",
+        roles=("<|User|>", "<|Bot|>"),
+        sep_style=SeparatorStyle.CHATINTERN,
+        sep="<eoh>",
+        sep2="<eoa>",
+        stop_token_ids=[1, 103028],
+        stop_str="<|User|>",
+    )
+)
+
+# Zephyr template
+# reference: https://huggingface.co/spaces/HuggingFaceH4/zephyr-playground/blob/main/dialogues.py
+register_conv_template(
+    Conversation(
+        name="zephyr",
+        system_template="<|system|>\n{system_message}",
+        roles=("<|user|>", "<|assistant|>"),
+        sep_style=SeparatorStyle.CHATML,
+        sep="</s>",
+        stop_token_ids=[2],
+        stop_str="</s>",
+    )
+)
