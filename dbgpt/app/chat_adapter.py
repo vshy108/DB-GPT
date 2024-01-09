@@ -7,6 +7,7 @@ We have integrated fastchat. For details, see: dbgpt/model/model_adapter.py
 
 from functools import cache
 from typing import List, Dict, Tuple
+# from fastchat.conversation import Conversation, get_conv_template
 from dbgpt.model.conversation import Conversation, get_conv_template
 from dbgpt.core.interface.message import ModelMessage, ModelMessageRoleType
 
