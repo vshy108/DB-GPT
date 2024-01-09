@@ -125,10 +125,16 @@ LLM_MODEL_CONFIG = {
     "codegeex2-6b": os.path.join(MODEL_PATH, "codegeex2-6b"),
     # https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha
     "zephyr-7b-alpha": os.path.join(MODEL_PATH, "zephyr-7b-alpha"),
+    # https://huggingface.co/HuggingFaceH4/zephyr-7b-beta
+    "zephyr-7b-beta": os.path.join(MODEL_PATH, "zephyr-7b-beta"),
     # https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1
     "mistral-7b-instruct-v0.1": os.path.join(MODEL_PATH, "Mistral-7B-Instruct-v0.1"),
     # https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca
     "mistral-7b-openorca": os.path.join(MODEL_PATH, "Mistral-7B-OpenOrca"),
+    # https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B
+    "openhermes-2.5-mistral-7b": os.path.join(MODEL_PATH, "OpenHermes-2.5-Mistral-7B"),
+    # https://huggingface.co/berkeley-nest/Starling-LM-7B-alpha
+    "starling-lm-7b-alpha": os.path.join(MODEL_PATH, "Starling-LM-7B-alpha"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-7B-V0.1
     "xwin-lm-7b-v0.1": os.path.join(MODEL_PATH, "Xwin-LM-7B-V0.1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-13B-V0.1
