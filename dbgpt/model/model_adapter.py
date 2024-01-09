@@ -449,13 +449,19 @@ def _get_fastchat_model_adapter(
     try:
         if use_fastchat_monkey_patch:
             model_adapter.get_model_adapter = _fastchat_get_adapter_monkey_patch
+            print(model_adapter.get_model_adapter)
+            print(1)
         thread_local.model_name = model_name
         _remove_black_list_model_of_fastchat()
+        print(2)
         if caller:
+            print(3)
             return caller(model_path)
     finally:
+        print(4)
         del thread_local.model_name
         print(_bak_get_model_adapter)
+        print(5)
         model_adapter.get_model_adapter = _bak_get_model_adapter
 
 
