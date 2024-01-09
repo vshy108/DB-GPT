@@ -58,7 +58,8 @@ _NEW_HF_CHAT_MODELS = [
 ]
 
 # The implementation of some models in fastchat will affect the DB-GPT loading model and will be temporarily added to the blacklist.
-_BLACK_LIST_MODLE_PROMPT = ["OpenHermes-2.5-Mistral-7B"]
+# _BLACK_LIST_MODLE_PROMPT = ["OpenHermes-2.5-Mistral-7B"]
+_BLACK_LIST_MODLE_PROMPT = []
 
 
 class LLMModelAdaper:
@@ -127,6 +128,9 @@ class LLMModelAdaper:
         prompt_template: str = None,
     ):
         conv = self.get_default_conv_template(model_name, model_path)
+        print(conv)
+        print(model_name)
+        print(model_path)
 
         if prompt_template:
             logger.info(f"Use prompt template {prompt_template} from config")
@@ -260,6 +264,7 @@ class OldLLMModelAdaperWrapper(LLMModelAdaper):
     def get_default_conv_template(
         self, model_name: str, model_path: str
     ) -> "Conversation":
+        print("OldLLMModelAdaperWrapper get_default_conv_template")
         return self._chat_adapter.get_conv_template(model_path)
 
     def load(self, model_path: str, from_pretrained_kwargs: dict):
@@ -389,6 +394,7 @@ def get_conv_template(name: str) -> "Conversation":
 def _auto_get_conv_template(model_name: str, model_path: str) -> "Conversation":
     try:
         adapter = get_llm_model_adapter(model_name, model_path, use_fastchat=True)
+        print("_auto_get_conv_template get_default_conv_template")
         return adapter.get_default_conv_template(model_name, model_path)
     except Exception:
         return None
