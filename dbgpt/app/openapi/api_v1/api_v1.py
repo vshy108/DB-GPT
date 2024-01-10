@@ -411,6 +411,8 @@ async def chat_completions(dialogue: ConversationVo = Body()):
     print(
         f"chat_completions:{dialogue.chat_mode},{dialogue.select_param},{dialogue.model_name}"
     )
+    # NOTE: allow to no model_name in request
+    dialogue.model_name = dialogue.model_name or CFG.LLM_MODEL
     with root_tracer.start_span(
         "get_chat_instance", span_type=SpanType.CHAT, metadata=dialogue.dict()
     ):

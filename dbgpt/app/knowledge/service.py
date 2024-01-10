@@ -537,6 +537,7 @@ class KnowledgeService:
         request.name = space_name
         spaces = self.get_knowledge_space(request)
         if len(spaces) != 1:
+            # TODO: Should not return internal server error here
             raise Exception(
                 f"have not found {space_name} space or found more than one space called {space_name}"
             )
