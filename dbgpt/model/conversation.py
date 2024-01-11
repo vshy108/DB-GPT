@@ -411,6 +411,7 @@ register_conv_template(
 register_conv_template(
     Conversation(
         name="openchat_3.5",
+        system="",
         roles=("GPT4 Correct User", "GPT4 Correct Assistant"),
         messages=(),
         offset=0,
