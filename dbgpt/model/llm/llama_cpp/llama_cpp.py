@@ -2,7 +2,9 @@
 Fork from text-generation-webui https://github.com/oobabooga/text-generation-webui/blob/main/modules/llamacpp_model.py
 """
 # NOTE: the original re does not allow varying length lookbehinds
-import regex as re
+# import regex as re
+import re
+
 from typing import Dict
 import logging
 import torch
@@ -151,114 +153,114 @@ class LlamaCppModel:
             #stop=["[/SYS]", "[/INST]", "[/ASSISTANT]"],
         )
 
-        print(completion_chunks)
+        # print(completion_chunks)
 
-        def search_pattern(pattern, text):
-            return re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+        # def search_pattern(pattern, text):
+        #     return re.search(pattern, text, re.DOTALL | re.IGNORECASE)
 
-        #output = ""
-        stack_output = ""
-        completion_chunks_list = list(completion_chunks)
-        is_done = False
+        output = ""
+        # stack_output = ""
+        # completion_chunks_list = list(completion_chunks)
+        # is_done = False
         
-        for index, completion_chunk in enumerate(completion_chunks_list):
-            text = completion_chunk["choices"][0]["text"]
-            stack_output += text
-            print(stack_output)
+        # for index, completion_chunk in enumerate(completion_chunks_list):
+        #     text = completion_chunk["choices"][0]["text"]
+        #     stack_output += text
+        #     print(stack_output)
 
-            ass_match = search_pattern(r'(?:(?:\[ASS(?:ISTANT)?\])|(?:<<ASS(?:ISTANT)?>>))\s*(.*)', stack_output)
-            ans_match = search_pattern(r'\[ANS\]\s*(.*)', stack_output)
-            sys_slash_match = search_pattern(r'</?</SYS>>\s*(.*)', stack_output)
-            double_square_ans_match = search_pattern(r"\[/?ANS\](.*?)\[/ANS\]", stack_output)
-            double_square_ass_match = search_pattern(r"\[/?ASS\](.*?)\[/ASS\]", stack_output)
-            sys_match = search_pattern(r"<</?SYS>>([^<]*)(<\*?/SYS>|\[\*?/SYS\])", stack_output)
-            sys_inst_match = search_pattern(r"<</SYS>>(.*?)<</INST>>", stack_output)
-            sys_inst_square_match = search_pattern(r"<<SYS>>(.*?)\[/INST\]", stack_output)
-            double_sys_match = search_pattern(r"<</SYS>>(.*?)<\/?</SYS>>", stack_output)
-            inst_match = search_pattern(r"<</INST>>([^<]*)(</INST>|\[/INST\])", stack_output)
-            inst_ai_match = search_pattern(r"<</INST_AI>>([^<]*)(</INST_AI>|\[/INST_AI\])", stack_output)
-            inst_yonghu_match = search_pattern(r"<</INST>>([^<]*)(<</用户>>|\[/用户\])", stack_output)
-            double_inst_match = search_pattern(r"<</INST>>(.*?)<</INST>>", stack_output)
-            assistant_match = search_pattern(r"(?:<</ASSISTANT>>|\[/?ASSISTANT\])(.*?)(</ASSISTANT>|\[/ASSISTANT\])", stack_output)
-            assistant_cn_match = search_pattern(r"(?:<</助手>>|\[/?助手\])(.*?)((?:<[^>]+>)|</助手>|\[/助手\])", stack_output)
-            assistant_pipe_match = search_pattern(r"<<ASSISTANT>>(.*?)(?:<[^>]+>)", stack_output)
-            ai_match = search_pattern(r"<</AI>>([^<]*)(</AI>|\[/AI\])", stack_output)
-            ai_inst_match = search_pattern(r"<</?AI>>([^<]*)(</INST>|\[/INST\])", stack_output)
-            ai_cn_match = search_pattern(r'【(?:AI)?助手】\s*(.*)', stack_output)
-            ai_pipe_match = search_pattern(r"<\|AI\|>(.*?)<\|[^>]+\|>", stack_output)
-            ren_gong_zhi_neng_match = search_pattern(r'<@ 人工智能助手 @>(.*?)<\*/人工智能助手>', stack_output)
-            ren_gong_zhi_neng_square_match = search_pattern(r'【人工智能助手】\s*(.*)', stack_output)
-            cannot_answer_match = search_pattern(r'(?<!(<<\/USER>>)\s*)(' + CANNOT_ANSWER + ')', stack_output)
+        #     ass_match = search_pattern(r'(?:(?:\[ASS(?:ISTANT)?\])|(?:<<ASS(?:ISTANT)?>>))\s*(.*)', stack_output)
+        #     ans_match = search_pattern(r'\[ANS\]\s*(.*)', stack_output)
+        #     sys_slash_match = search_pattern(r'</?</SYS>>\s*(.*)', stack_output)
+        #     double_square_ans_match = search_pattern(r"\[/?ANS\](.*?)\[/ANS\]", stack_output)
+        #     double_square_ass_match = search_pattern(r"\[/?ASS\](.*?)\[/ASS\]", stack_output)
+        #     sys_match = search_pattern(r"<</?SYS>>([^<]*)(<\*?/SYS>|\[\*?/SYS\])", stack_output)
+        #     sys_inst_match = search_pattern(r"<</SYS>>(.*?)<</INST>>", stack_output)
+        #     sys_inst_square_match = search_pattern(r"<<SYS>>(.*?)\[/INST\]", stack_output)
+        #     double_sys_match = search_pattern(r"<</SYS>>(.*?)<\/?</SYS>>", stack_output)
+        #     inst_match = search_pattern(r"<</INST>>([^<]*)(</INST>|\[/INST\])", stack_output)
+        #     inst_ai_match = search_pattern(r"<</INST_AI>>([^<]*)(</INST_AI>|\[/INST_AI\])", stack_output)
+        #     inst_yonghu_match = search_pattern(r"<</INST>>([^<]*)(<</用户>>|\[/用户\])", stack_output)
+        #     double_inst_match = search_pattern(r"<</INST>>(.*?)<</INST>>", stack_output)
+        #     assistant_match = search_pattern(r"(?:<</ASSISTANT>>|\[/?ASSISTANT\])(.*?)(</ASSISTANT>|\[/ASSISTANT\])", stack_output)
+        #     assistant_cn_match = search_pattern(r"(?:<</助手>>|\[/?助手\])(.*?)((?:<[^>]+>)|</助手>|\[/助手\])", stack_output)
+        #     assistant_pipe_match = search_pattern(r"<<ASSISTANT>>(.*?)(?:<[^>]+>)", stack_output)
+        #     ai_match = search_pattern(r"<</AI>>([^<]*)(</AI>|\[/AI\])", stack_output)
+        #     ai_inst_match = search_pattern(r"<</?AI>>([^<]*)(</INST>|\[/INST\])", stack_output)
+        #     ai_cn_match = search_pattern(r'【(?:AI)?助手】\s*(.*)', stack_output)
+        #     ai_pipe_match = search_pattern(r"<\|AI\|>(.*?)<\|[^>]+\|>", stack_output)
+        #     ren_gong_zhi_neng_match = search_pattern(r'<@ 人工智能助手 @>(.*?)<\*/人工智能助手>', stack_output)
+        #     ren_gong_zhi_neng_square_match = search_pattern(r'【人工智能助手】\s*(.*)', stack_output)
+        #     cannot_answer_match = search_pattern(r'(?<!(<<\/USER>>)\s*)(' + CANNOT_ANSWER + ')', stack_output)
             
-            # Check if the current completion_chunk is the last one
-            is_last_chunk = index == len(completion_chunks_list) - 1
-            remove_spaces = r'(?<=\n)\s+'
-            tags_regex = r'[<\[][^\r\n]*[>\]]'
-            last_chunk_matches = [
-                ass_match, ans_match, ai_cn_match, 
-                ren_gong_zhi_neng_square_match, sys_slash_match
-            ]
-            content_matches = [
-                sys_inst_match, double_sys_match, double_square_ans_match,
-                double_square_ass_match, sys_match, 
-                double_inst_match, assistant_match, ai_match,
-                ren_gong_zhi_neng_match, sys_inst_square_match,
-                inst_ai_match, ai_inst_match, ai_pipe_match,
-                assistant_pipe_match, assistant_cn_match,
-                inst_yonghu_match,
-            ]
+        #     # Check if the current completion_chunk is the last one
+        #     is_last_chunk = index == len(completion_chunks_list) - 1
+        #     remove_spaces = r'(?<=\n)\s+'
+        #     tags_regex = r'[<\[][^\r\n]*[>\]]'
+        #     last_chunk_matches = [
+        #         ass_match, ans_match, ai_cn_match, 
+        #         ren_gong_zhi_neng_square_match, sys_slash_match
+        #     ]
+        #     content_matches = [
+        #         sys_inst_match, double_sys_match, double_square_ans_match,
+        #         double_square_ass_match, sys_match, 
+        #         double_inst_match, assistant_match, ai_match,
+        #         ren_gong_zhi_neng_match, sys_inst_square_match,
+        #         inst_ai_match, ai_inst_match, ai_pipe_match,
+        #         assistant_pipe_match, assistant_cn_match,
+        #         inst_yonghu_match,
+        #     ]
 
-            if cannot_answer_match:
-                yield CANNOT_ANSWER
-                stack_output = ""
-                break
+        #     if cannot_answer_match:
+        #         yield CANNOT_ANSWER
+        #         stack_output = ""
+        #         break
 
-            for content_match in content_matches:
-                if content_match:
-                    extract_content = content_match.group(1).strip()
-                    extract_content = re.sub(tags_regex, '', extract_content)
-                    yield re.sub(remove_spaces, '', extract_content, flags=re.MULTILINE)
-                    stack_output = ""
-                    is_done = True
-                    break
+        #     for content_match in content_matches:
+        #         if content_match:
+        #             extract_content = content_match.group(1).strip()
+        #             extract_content = re.sub(tags_regex, '', extract_content)
+        #             yield re.sub(remove_spaces, '', extract_content, flags=re.MULTILINE)
+        #             stack_output = ""
+        #             is_done = True
+        #             break
 
-            if is_done:
-                break
+        #     if is_done:
+        #         break
 
-            if inst_match:
-                extract_content = inst_match.group(1).split("问题:")[0].strip()
-                if extract_content.startswith("['"):
-                    extract_content = extract_content[2:]
-                if extract_content.endswith("']"):
-                    extract_content = extract_content[:-2]
-                extract_content = re.sub(tags_regex, '', extract_content)
-                yield extract_content
-                stack_output = ""
-                break
+        #     if inst_match:
+        #         extract_content = inst_match.group(1).split("问题:")[0].strip()
+        #         if extract_content.startswith("['"):
+        #             extract_content = extract_content[2:]
+        #         if extract_content.endswith("']"):
+        #             extract_content = extract_content[:-2]
+        #         extract_content = re.sub(tags_regex, '', extract_content)
+        #         yield extract_content
+        #         stack_output = ""
+        #         break
 
-            elif is_last_chunk:
-                for last_match in last_chunk_matches:
-                    if last_match:
-                        extract_content = last_match.group(1).strip()
-                        extract_content = re.sub(tags_regex, '', extract_content)
-                        yield extract_content
-                        stack_output = ""
-                        is_done = True
-                        break
-                if not is_done:
-                    extract_content = stack_output
-                    extract_content = re.sub(tags_regex, '', extract_content)
-                    yield extract_content
-                    stack_output = ""
-                    is_done = True
+        #     elif is_last_chunk:
+        #         for last_match in last_chunk_matches:
+        #             if last_match:
+        #                 extract_content = last_match.group(1).strip()
+        #                 extract_content = re.sub(tags_regex, '', extract_content)
+        #                 yield extract_content
+        #                 stack_output = ""
+        #                 is_done = True
+        #                 break
+        #         if not is_done:
+        #             extract_content = stack_output
+        #             extract_content = re.sub(tags_regex, '', extract_content)
+        #             yield extract_content
+        #             stack_output = ""
+        #             is_done = True
 
-            if is_done:
-                break
+        #     if is_done:
+        #         break
 
-            yield stack_output
+        #     yield stack_output
 
-        #for completion_chunk in completion_chunks:
-            #text = completion_chunk["choices"][0]["text"]
-            #output += text
-            # print(output)
-            #yield output
+        for completion_chunk in completion_chunks:
+            text = completion_chunk["choices"][0]["text"]
+            output += text
+            print(output)
+            yield output
