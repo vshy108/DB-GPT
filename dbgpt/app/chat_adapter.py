@@ -253,7 +253,9 @@ class LlamaCppChatAdapter(BaseChatAdpter):
         return is_match
 
     def get_conv_template(self, model_path: str) -> Conversation:
-        return get_conv_template("llama-2")
+        # return get_conv_template("llama-2")
+        # NOTE: temporary workaround to make the GGUF file use different chat template
+        return get_conv_template("openchat_3.5")
 
     def get_generate_stream_func(self, model_path: str):
         from dbgpt.model.llm_out.llama_cpp_llm import generate_stream

@@ -407,5 +407,18 @@ register_conv_template(
     )
 )
 
+# OpenChat 3.5 default template
+register_conv_template(
+    Conversation(
+        name="openchat_3.5",
+        roles=("GPT4 Correct User", "GPT4 Correct Assistant"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.FALCON_CHAT,
+        sep="<|end_of_turn|>",
+    )
+)
+
+
 
 # TODO Support other model conversation template
