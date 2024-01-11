@@ -414,7 +414,7 @@ register_conv_template(
         roles=("GPT4 Correct User", "GPT4 Correct Assistant"),
         messages=(),
         offset=0,
-        sep_style=SeparatorStyle.FALCON_CHAT,
+        sep_style=SeparatorStyle.ADD_COLON_SINGLE,
         sep="<|end_of_turn|>",
     )
 )
