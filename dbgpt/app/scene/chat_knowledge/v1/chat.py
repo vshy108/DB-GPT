@@ -133,7 +133,7 @@ class ChatKnowledge(BaseChat):
         candidates_with_scores = reduce(lambda x, y: x + y, docs_with_scores)
         # candidates document rerank
         from dbgpt.rag.retriever.rerank import DefaultRanker
-
+        # print(f"top_k, {self.top_k}")
         ranker = DefaultRanker(self.top_k)
         candidates_with_scores = ranker.rank(candidates_with_scores)
         self.chunks_with_score = []

@@ -101,7 +101,9 @@ LLM_MODEL_CONFIG = {
     # NOTE: wget https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/resolve/main/openhermes-2.5-mistral-7b.Q4_K_M.gguf -O models/openhermes-2.5-mistral-7b.Q4_K_M.gguf
     #"llama-cpp": os.path.join(MODEL_PATH, "openhermes-2.5-mistral-7b.Q4_K_M.gguf"),
     # wget https://huggingface.co/TheBloke/Starling-LM-7B-alpha-GGUF/resolve/main/starling-lm-7b-alpha.Q5_K_M.gguf
-    "llama-cpp": os.path.join(MODEL_PATH, "starling-lm-7b-alpha.Q5_K_M.gguf"),
+    #"llama-cpp": os.path.join(MODEL_PATH, "starling-lm-7b-alpha.Q5_K_M.gguf"),
+    # wget https://huggingface.co/TheBloke/openchat-3.5-1210-GGUF/resolve/main/openchat-3.5-1210.Q5_K_M.gguf
+    "llama-cpp": os.path.join(MODEL_PATH, "openchat-3.5-1210.Q5_K_M.gguf"),
     # https://huggingface.co/internlm/internlm-chat-7b-v1_1, 7b vs 7b-v1.1: https://github.com/InternLM/InternLM/issues/288
     "internlm-7b": os.path.join(MODEL_PATH, "internlm-chat-7b"),
     "internlm-7b-8k": os.path.join(MODEL_PATH, "internlm-chat-7b-8k"),
@@ -118,6 +120,22 @@ LLM_MODEL_CONFIG = {
     "orca-2-13b": os.path.join(MODEL_PATH, "Orca-2-13b"),
     # https://huggingface.co/openchat/openchat_3.5
     "openchat_3.5": os.path.join(MODEL_PATH, "openchat_3.5"),
+    # NOTE: https://huggingface.co/openchat/openchat-3.5-1210
+    "openchat_3.5-1210": os.path.join(MODEL_PATH, "openchat-3.5-1210"),
+    # NOTE: https://huggingface.co/openchat/openchat-3.5-0106
+    "openchat_3.5-0106": os.path.join(MODEL_PATH, "openchat-3.5-0106"),
+    # NOTE: https://huggingface.co/openchat/openchat_8192
+    "openchat_8192": os.path.join(MODEL_PATH, "openchat_8192"),
+    # NOTE: https://huggingface.co/openchat/openchat
+    "openchat": os.path.join(MODEL_PATH, "openchat"),
+    # NOTE: https://huggingface.co/openchat/opencoderplus
+    "opencoderplus": os.path.join(MODEL_PATH, "opencoderplus"),
+    # NOTE: https://huggingface.co/openchat/openchat_v3.1
+    "openchat_v3.1": os.path.join(MODEL_PATH, "openchat_v3.1"),
+    # NOTE: https://huggingface.co/openchat/openchat_v3.2_super
+    "openchat_v3.2_super": os.path.join(MODEL_PATH, "openchat_v3.2_super"),
+    # NOTE: https://huggingface.co/openchat/openchat_v3.2
+    "openchat_v3.2": os.path.join(MODEL_PATH, "openchat_v3.2"),
     # https://huggingface.co/hfl/chinese-alpaca-2-7b
     "chinese-alpaca-2-7b": os.path.join(MODEL_PATH, "chinese-alpaca-2-7b"),
     # https://huggingface.co/hfl/chinese-alpaca-2-13b
@@ -130,6 +148,8 @@ LLM_MODEL_CONFIG = {
     "zephyr-7b-beta": os.path.join(MODEL_PATH, "zephyr-7b-beta"),
     # https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1
     "mistral-7b-instruct-v0.1": os.path.join(MODEL_PATH, "Mistral-7B-Instruct-v0.1"),
+    # NOTE: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2
+    "mistral-7b-instruct-v0.2": os.path.join(MODEL_PATH, "Mistral-7B-Instruct-v0.2"),
     # https://huggingface.co/Open-Orca/Mistral-7B-OpenOrca
     "mistral-7b-openorca": os.path.join(MODEL_PATH, "Mistral-7B-OpenOrca"),
     # NOTE: https://huggingface.co/Weyaxi/OpenHermes-2.5-neural-chat-v3-3-Slerp
@@ -140,6 +160,8 @@ LLM_MODEL_CONFIG = {
     "starling-lm-7b-alpha": os.path.join(MODEL_PATH, "Starling-LM-7B-alpha"),
     # NOTE: https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0
     "solar-10.7b-instruct-v1.0": os.path.join(MODEL_PATH, "SOLAR-10.7B-Instruct-v1.0"),
+    # NOTE: https://huggingface.co/Intel/neural-chat-7b-v3-1
+    "neural-chat-7b-v3-1" : os.path.join(MODEL_PATH, "neural-chat-7b-v3-1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-7B-V0.1
     "xwin-lm-7b-v0.1": os.path.join(MODEL_PATH, "Xwin-LM-7B-V0.1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-13B-V0.1
@@ -158,6 +180,8 @@ LLM_MODEL_CONFIG = {
 EMBEDDING_MODEL_CONFIG = {
     "text2vec": os.path.join(MODEL_PATH, "text2vec-large-chinese"),
     "text2vec-base": os.path.join(MODEL_PATH, "text2vec-base-chinese"),
+    # NOTE: https://huggingface.co/shibing624/text2vec-base-chinese-paraphrase
+    "text2vec-base-paraphrase": os.path.join(MODEL_PATH, "text2vec-base-chinese-paraphrase"),
     # https://huggingface.co/moka-ai/m3e-large
     "m3e-base": os.path.join(MODEL_PATH, "m3e-base"),
     # https://huggingface.co/moka-ai/m3e-base
@@ -167,8 +191,14 @@ EMBEDDING_MODEL_CONFIG = {
     "bge-base-en": os.path.join(MODEL_PATH, "bge-base-en"),
     # https://huggingface.co/BAAI/bge-large-zh
     "bge-large-zh": os.path.join(MODEL_PATH, "bge-large-zh"),
+    # NOTE: https://huggingface.co/BAAI/bge-large-zh-v1.5
+    "bge-large-zh-v1.5": os.path.join(MODEL_PATH, "bge-large-zh-v1.5"),
+    # NOTE: https://huggingface.co/BAAI/bge-base-zh-v1.5
+    "bge-base-zh-v1.5": os.path.join(MODEL_PATH, "bge-base-zh-v1.5"),
     "bge-base-zh": os.path.join(MODEL_PATH, "bge-base-zh"),
     "sentence-transforms": os.path.join(MODEL_PATH, "all-MiniLM-L6-v2"),
+    # NOTE: https://huggingface.co/sentence-transformers/all-mpnet-base-v2
+    "all-mpnet-base-v2": os.path.join(MODEL_PATH, "all-mpnet-base-v2"),
     "proxy_openai": "proxy_openai",
     "proxy_azure": "proxy_azure",
 }

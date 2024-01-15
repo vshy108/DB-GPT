@@ -54,7 +54,9 @@ class PromptTemplate(BaseModel, ABC):
 
     need_historical_messages: bool = False
 
+    # NOTE: 0.6
     temperature: float = 0.6
+    # NOTE: 1024
     max_new_tokens: int = 1024
 
     class Config:
