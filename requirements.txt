@@ -217,9 +217,9 @@ threadpoolctl==3.2.0
 tiktoken==0.5.1
 tokenizers==0.15.0
 tomli==2.0.1
--e git+https://github.com/pytorch/pytorch.git@a8e7c98cb95ff97bb30a728c6b2a1ce6bff946eb#egg=torch
+torch==2.1.2
 torchaudio==2.1.2
-torchvision==0.16.1
+torchvision==0.16.2
 tqdm==4.66.1
 transformers==4.36.1
 transformers-stream-generator==0.0.4
