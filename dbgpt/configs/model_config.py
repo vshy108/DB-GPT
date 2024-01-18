@@ -149,6 +149,8 @@ LLM_MODEL_CONFIG = {
     "starling-lm-7b-alpha": os.path.join(MODEL_PATH, "Starling-LM-7B-alpha"),
     # NOTE: https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0
     "solar-10.7b-instruct-v1.0": os.path.join(MODEL_PATH, "SOLAR-10.7B-Instruct-v1.0"),
+    # NOTE: https://huggingface.co/Intel/neural-chat-7b-v3-1
+    "neural-chat-7b-v3-1": os.path.join(MODEL_PATH, "neural-chat-7b-v3-1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-7B-V0.1
     "xwin-lm-7b-v0.1": os.path.join(MODEL_PATH, "Xwin-LM-7B-V0.1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-13B-V0.1
