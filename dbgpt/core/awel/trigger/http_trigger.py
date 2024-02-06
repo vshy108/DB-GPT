@@ -3,6 +3,8 @@ import logging
 from enum import Enum
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union, cast
 
+from fastapi import Depends
+
 from dbgpt._private.pydantic import BaseModel
 
 from ..dag.base import DAG

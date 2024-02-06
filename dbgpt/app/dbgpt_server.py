@@ -11,6 +11,9 @@ from fastapi.openapi.docs import get_swagger_ui_html
 # fastapi import time cost about 0.05s
 from fastapi.staticfiles import StaticFiles
 
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(ROOT_PATH)
+
 from dbgpt._private.config import Config
 from dbgpt.app.base import (
     WebServerParameters,
@@ -38,10 +41,6 @@ from dbgpt.util.utils import (
     setup_http_service_logging,
     setup_logging,
 )
-
-ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(ROOT_PATH)
-
 
 static_file_path = os.path.join(ROOT_PATH, "dbgpt", "app/static")
 

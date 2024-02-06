@@ -6,12 +6,12 @@ import threading
 from dataclasses import dataclass, field
 from typing import Optional
 
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(ROOT_PATH)
+
 from dbgpt._private.config import Config
 from dbgpt.component import SystemApp
 from dbgpt.util.parameter_utils import BaseParameters
-
-ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(ROOT_PATH)
 
 logger = logging.getLogger(__name__)
 
