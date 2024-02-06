@@ -15,6 +15,8 @@ from typing import (
     get_origin,
 )
 
+from fastapi import Depends
+
 from dbgpt._private.pydantic import BaseModel, Field
 
 from ..dag.base import DAG
