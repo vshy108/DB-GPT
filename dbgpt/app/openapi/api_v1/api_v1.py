@@ -32,6 +32,7 @@ from dbgpt.rag.summary.db_summary_client import DBSummaryClient
 from dbgpt.serve.agent.agents.controller import multi_agents
 from dbgpt.serve.flow.service.service import Service as FlowService
 from dbgpt.util.api_utils import _check_api_key
+from dbgpt.serve.flow.service.service import Service as FlowService
 from dbgpt.util.executor_utils import (
     DefaultExecutorFactory,
     ExecutorFactory,
