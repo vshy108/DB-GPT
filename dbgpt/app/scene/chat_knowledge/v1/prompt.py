@@ -53,7 +53,7 @@ _DEFAULT_TEMPLATE = (
 PROMPT_NEED_STREAM_OUT = True
 prompt = ChatPromptTemplate(
     messages=[
-        SystemPromptTemplate.from_template(_DEFAULT_TEMPLATE),
+        SystemPromptTemplate.from_template(PROMPT_SCENE_DEFINE + _DEFAULT_TEMPLATE),
         MessagesPlaceholder(variable_name="chat_history"),
         HumanPromptTemplate.from_template("{question}"),
     ]
