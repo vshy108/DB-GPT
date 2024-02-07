@@ -62,7 +62,7 @@ class DbHistoryMemory(BaseChatHistoryMemory):
 
         conversations.append(_conversation_to_dict(once_message))
         # Avoid (pymysql.err.DataError) (1406, "Data too long for column 'messages')
-        #chat_history.messages = json.dumps(conversations, ensure_ascii=False)
+        chat_history.messages = json.dumps(conversations, ensure_ascii=False)
 
         self.chat_history_dao.raw_update(chat_history)
 
