@@ -199,6 +199,8 @@ class ModelRequest:
     """Whether to echo the input messages."""
     span_id: Optional[str] = None
     """The span id of the model inference."""
+    no_relevant_docs: Optional[bool] = False
+    """no relevant docs to retrieve"""
 
     context: Optional[ModelRequestContext] = field(
         default_factory=lambda: ModelRequestContext()
