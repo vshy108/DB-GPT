@@ -2,8 +2,8 @@
 -- eg. `LOCAL_DB_NAME=dbgpt`
 
 CREATE
-DATABASE IF NOT EXISTS dbgpt;
-use dbgpt;
+DATABASE IF NOT EXISTS dbvicuna;
+use dbvicuna;
 
 -- For alembic migration tool
 CREATE TABLE IF NOT EXISTS `alembic_version`
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `gpts_instance` (
   UNIQUE KEY `uk_gpts` (`gpts_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT="gpts instance";
 
-CREATE TABLE `gpts_messages` (
+CREATE TABLE IF NOT EXISTS `gpts_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'autoincrement id',
   `conv_id` varchar(255) NOT NULL COMMENT 'The unique id of the conversation record',
   `sender` varchar(255) NOT NULL COMMENT 'Who speaking in the current conversation turn',
@@ -242,7 +242,7 @@ CREATE TABLE `gpts_messages` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT="gpts message";
 
 
-CREATE TABLE `gpts_plans` (
+CREATE TABLE IF NOT EXISTS `gpts_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'autoincrement id',
   `conv_id` varchar(255) NOT NULL COMMENT 'The unique id of the conversation record',
   `sub_task_num` int(11) NOT NULL COMMENT 'Subtask number',

@@ -215,10 +215,10 @@ async def document_upload(
 
 
 @router.post("/knowledge/{space_name}/document/sync", dependencies=[Depends(_check_api_key)])
-def document_sync(space_name: str, request: DocumentSyncRequest):
+async def document_sync(space_name: str, request: DocumentSyncRequest):
     logger.info(f"Received params: {space_name}, {request}")
     try:
-        knowledge_space_service.sync_knowledge_document(
+        await knowledge_space_service.sync_knowledge_document(
             space_name=space_name, sync_request=request
         )
         return Result.succ([])

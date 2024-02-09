@@ -12,7 +12,7 @@ PROMPT_SCENE_DEFINE = """A chat between a curious user and an artificial intelli
 The assistant gives helpful, detailed, professional and polite answers to the user's questions."""
 
 _DEFAULT_TEMPLATE_ZH = (
-    """我们已经提供了一个到某一点的现有总结:{existing_answer}\n 请根据你之前推理的内容进行最终的总结,总结回答的时候最好按照1.2.3.进行."""
+    """我们已经提供了一个到某一点的现有总结:{existing_answer}\n 请完全根据你之前推理的内容和完全忽略内嵌数据库和外来资讯来进行最简要最终的总结,总结回答的时候最好按照1.2.3.进行."""
 )
 
 _DEFAULT_TEMPLATE_EN = """
@@ -26,7 +26,7 @@ _DEFAULT_TEMPLATE = (
 
 PROMPT_RESPONSE = """"""
 
-PROMPT_NEED_NEED_STREAM_OUT = True
+PROMPT_NEED_NEED_STREAM_OUT = False
 
 prompt = ChatPromptTemplate(
     messages=[

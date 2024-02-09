@@ -9,7 +9,7 @@ from dbgpt.util.chat_util import run_async_tasks
 
 SUMMARY_PROMPT_TEMPLATE_ZH = """请根据提供的上下文信息的进行精简地总结:
 {context}
-答案尽量精确和简单,不要过长，长度控制在100字左右, 注意:请用<中文>来进行总结。
+答案尽量精确和简单,不要过长，可是内容必须要完整，完全忽略内嵌数据库和外来资讯，长度控制在100字左右, 注意:请用中文来进行总结。
 """
 
 SUMMARY_PROMPT_TEMPLATE_EN = """
@@ -18,7 +18,10 @@ Write a quick summary of the following context:
 the summary should be as concise as possible and not overly lengthy.Please keep the answer within approximately 200 characters.
 """
 
-REFINE_SUMMARY_TEMPLATE_ZH = """我们已经提供了一个到某一点的现有总结:{context}\n 请根据你之前推理的内容进行总结,总结回答的时候最好按照1.2.3.进行. 注意:请用<中文>来进行总结。"""
+#REFINE_SUMMARY_TEMPLATE_ZH = """我们已经提供了一个到某一点的现有总结:{context}\n 请根据你之前推理的内容进行总结,总结回答的时候最好按照1.2.3.进行. 注意:请用<中文>来进行总结。"""
+REFINE_SUMMARY_TEMPLATE_ZH = (
+    """我们已经提供了一个到某一点的现有总结:{context}\n 请完全根据你之前推理的内容和完全忽略内嵌数据库和外来资讯来进行最简要最终的总结,总结回答的时候最好按照1.2.3.进行.注意:请用中文来进行总结。"""
+)
 
 REFINE_SUMMARY_TEMPLATE_EN = """
 We have provided an existing summary up to a certain point: {context}, We have the opportunity to refine the existing summary (only if needed) with some more context below. 
@@ -73,6 +76,7 @@ class SummaryExtractor(Extractor):
             - model_name: str
             - chunk_docs: List[Document]
         """
+        print("_aextract")
         texts = [doc.content for doc in chunks]
         from dbgpt.util.prompt_util import PromptHelper
 
