@@ -154,6 +154,11 @@ class ChatKnowledge(BaseChat):
         if not candidates_with_scores or len(candidates_with_scores) == 0:
             print("no relevant docs to retrieve")
             context = "no relevant docs to retrieve"
+            return {
+                "context": context,
+                "question": self.current_user_input,
+                "relations": None,
+            }
         else:
             self.chunks_with_score = []
             for chunk in candidates_with_scores:
@@ -166,21 +171,22 @@ class ChatKnowledge(BaseChat):
 
             context = "\n".join([doc.content for doc in candidates_with_scores])
 
-        if CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS:
-            self.relations = list(
-                set(
-                    [
-                        os.path.basename(str(d.metadata.get("source", "")))
-                        for d in candidates_with_scores
-                    ]
+            if CFG.KNOWLEDGE_CHAT_SHOW_RELATIONS:
+                self.relations = list(
+                    set(
+                        [
+                            os.path.basename(str(d.metadata.get("source", "")))
+                            for d in candidates_with_scores
+                        ]
+                    )
                 )
-            )
-        input_values = {
-            "context": context,
-            "question": self.current_user_input,
-            "relations": self.relations,
-        }
-        return input_values
+                
+            input_values = {
+                "context": context,
+                "question": self.current_user_input,
+                "relations": self.relations,
+            }
+            return input_values
 
     def parse_source_view(self, chunks_with_score: List):
         """

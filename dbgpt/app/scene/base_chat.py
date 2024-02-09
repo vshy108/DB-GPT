@@ -26,6 +26,12 @@ from dbgpt.util.tracer import root_tracer, trace
 logger = logging.getLogger(__name__)
 CFG = Config()
 
+_CANNOT_ANSWER_ZH = r'知识库中提供的内容不足以回答此问题。'
+_CANNOT_ANSWER_EN = r'The content available in the knowledge base is insufficient to answer this question.'
+CANNOT_ANSWER = (
+    _CANNOT_ANSWER_EN if CFG.LANGUAGE == "en" else _CANNOT_ANSWER_ZH
+)
+
 
 def _build_conversation(
     chat_mode: ChatScene,
@@ -257,6 +263,8 @@ class BaseChat(ABC):
         # llm_messages = self.generate_llm_messages()
         model_request: ModelRequest = await node.call(call_data=node_input)
         model_request.context.cache_enable = self.model_cache_enable
+        if input_values.get("context", None) == "no relevant docs to retrieve":
+            model_request.no_relevant_docs = True
         return model_request
 
     def stream_plugin_call(self, text):
@@ -290,27 +298,36 @@ class BaseChat(ABC):
             "BaseChat.stream_call", metadata=payload.to_dict()
         )
         payload.span_id = span.span_id
-        try:
-            async for output in self.call_streaming_operator(payload):
-                # Plugin research in result generation
-                msg = self.prompt_template.output_parser.parse_model_stream_resp_ex(
-                    output, 0
-                )
-                view_msg = self.stream_plugin_call(msg)
-                view_msg = view_msg.replace("\n", "\\n")
-                yield view_msg
-            self.current_message.add_ai_message(msg)
-            view_msg = self.stream_call_reinforce_fn(view_msg)
-            self.current_message.add_view_message(view_msg)
+
+        # NOTE: Directly reply without LLM model processing
+        if payload.no_relevant_docs is True:
+            empty_reply = CANNOT_ANSWER
+            yield empty_reply
+            logger.info(empty_reply)
+            self.current_message.add_view_message(empty_reply)
             span.end()
-        except Exception as e:
-            print(traceback.format_exc())
-            logger.error("model response parse failed！" + str(e))
-            self.current_message.add_view_message(
-                f"""<span style=\"color:red\">ERROR!</span>{str(e)}\n  {ai_response_text} """
-            )
-            ### store current conversation
-            span.end(metadata={"error": str(e)})
+        else:
+            try:
+                async for output in self.call_streaming_operator(payload):
+                    # Plugin research in result generation
+                    msg = self.prompt_template.output_parser.parse_model_stream_resp_ex(
+                        output, 0
+                    )
+                    view_msg = self.stream_plugin_call(msg)
+                    view_msg = view_msg.replace("\n", "\\n")
+                    yield view_msg
+                self.current_message.add_ai_message(msg)
+                view_msg = self.stream_call_reinforce_fn(view_msg)
+                self.current_message.add_view_message(view_msg)
+                span.end()
+            except Exception as e:
+                print(traceback.format_exc())
+                logger.error("model response parse failed！" + str(e))
+                self.current_message.add_view_message(
+                    f"""<span style=\"color:red\">ERROR!</span>{str(e)}\n  {ai_response_text} """
+                )
+                ### store current conversation
+                span.end(metadata={"error": str(e)})
         await blocking_func_to_async(
             self._executor, self.current_message.end_current_round
         )
