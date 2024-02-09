@@ -10,6 +10,11 @@
         curl -X GET $DBGPT_SERVER/api/v1/awel/trigger/examples/hello\?name\=zhangsan
 
 """
+import os
+import sys
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(ROOT_PATH)
+
 from dbgpt._private.pydantic import BaseModel, Field
 from dbgpt.core.awel import DAG, HttpTrigger, MapOperator
 
@@ -35,8 +40,9 @@ with DAG("simple_dag_example") as dag:
 
 if __name__ == "__main__":
     if dag.leaf_nodes[0].dev_mode:
+        # Development mode, you can run the dag locally for debugging.
         from dbgpt.core.awel import setup_dev_environment
-
-        setup_dev_environment([dag])
+        setup_dev_environment([dag], port=5555)
     else:
+        # Production mode, DB-GPT will automatically load and execute the current file after startup.
         pass
