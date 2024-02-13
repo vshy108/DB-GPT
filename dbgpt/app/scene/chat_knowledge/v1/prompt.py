@@ -18,22 +18,22 @@ _PROMPT_SCENE_EN = """A conversation between a curious user and an artificial in
 """
 
 _PROMPT_SCENE_ZH = """好奇的用户和人工智能助手之间的一场对话。
-            助手将会完全忽视内嵌知识库，而只参考模板提供的新内容。
-            请假设模板提供的新内容是最新和最正确的资讯，其他模板提供的新内容以外的内容请全部忽视。
-            经过专业和礼貌的方式，且完全基于模板提供的新内容并完全忽视内嵌知识库下，对用户的问题提供有用的、简要的回答。
+            助手将会完全忽视内嵌知识库，而只参考知识库内容。
+            请假设知识库内容是最新和最正确的资讯，知识库内容以外的资讯请全部忽视。
+            经过专业和礼貌的方式，且完全基于知识库内容和完全忽视内嵌知识库下，对用户的问题提供有用的、简要的回答。
 """
 
 PROMPT_SCENE_DEFINE = (
     _PROMPT_SCENE_EN if CFG.LANGUAGE == "en" else _PROMPT_SCENE_ZH
 )
 
-_DEFAULT_TEMPLATE_ZH = """模板提供的新内容:
+_DEFAULT_TEMPLATE_ZH = """知识库内容:
             {context}
             问题:
-            从模板提供的新内容中，{question}（请使用和用户相同的语言进行回答）
-            完全基于以上模板提供的新内容并完全忽视内嵌知识库, 专业、简要的回答用户的问题。
-            如果无法从以上模板提供的新内容中获取答案, 请说: "知识库中提供的内容不足以回答此问题"。
-            禁止参考模板提供的新内容以外的任何资源, 回答的时候最好按照1.2.3.点进行总结。
+            从知识库内容中，{question}（请使用和用户相同的语言进行回答）
+            完全基于以上知识库内容并完全忽视内嵌知识库, 专业、简要的回答用户的问题。
+            如果无法从以上知识库内容中获取答案, 请说: "知识库中提供的内容不足以回答此问题"。
+            禁止参考知识库内容以外的任何资源, 回答的时候最好按照1.2.3.点进行总结。
 """
 
 
@@ -65,6 +65,7 @@ prompt_adapter = AppScenePromptTemplateAdapter(
     stream_out=PROMPT_NEED_STREAM_OUT,
     output_parser=NormalChatOutputParser(is_stream_out=PROMPT_NEED_STREAM_OUT),
     need_historical_messages=False,
+    # temperature=0.6, 
 )
 
 CFG.prompt_template_registry.register(

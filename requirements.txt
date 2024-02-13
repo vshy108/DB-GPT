@@ -241,6 +241,7 @@ soupsieve==2.5
 spacy==3.7.3
 spacy-legacy==3.0.12
 spacy-loggers==1.0.5
+spacy-pkuseg==0.0.33
 SQLAlchemy==2.0.25
 sqlparse==0.4.4
 srsly==2.4.8
@@ -289,5 +290,6 @@ wsproto==1.2.0
 XlsxWriter==3.1.9
 yarl==1.9.4
 youtube-transcript-api==0.6.2
+zh-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.5.0/zh_core_web_sm-3.5.0-py3-none-any.whl#sha256=50ec664cef64a095dd9ec7b9a1dba76814db10d72e4024249f9105ace8cb5ffa
 zhipuai==1.0.7
 zipp==3.17.0
