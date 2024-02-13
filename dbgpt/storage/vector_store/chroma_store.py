@@ -2,6 +2,7 @@ import logging
 import os
 from typing import Any, List
 
+# NOTE: This is useful for testing and development, but not recommended for production use.
 from chromadb import PersistentClient
 from chromadb.config import Settings
 from pydantic import Field
