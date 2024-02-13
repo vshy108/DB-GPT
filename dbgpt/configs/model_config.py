@@ -121,6 +121,8 @@ LLM_MODEL_CONFIG = {
     "openchat-3.5": os.path.join(MODEL_PATH, "openchat_3.5"),
     # https://huggingface.co/openchat/openchat-3.5-1210
     "openchat-3.5-1210": os.path.join(MODEL_PATH, "openchat-3.5-1210"),
+    # https://huggingface.co/openchat/openchat-3.5-0106
+    "openchat-3.5-0106": os.path.join(MODEL_PATH, "openchat-3.5-0106"),
     # https://huggingface.co/hfl/chinese-alpaca-2-7b
     "chinese-alpaca-2-7b": os.path.join(MODEL_PATH, "chinese-alpaca-2-7b"),
     # https://huggingface.co/hfl/chinese-alpaca-2-13b
@@ -149,6 +151,10 @@ LLM_MODEL_CONFIG = {
     "starling-lm-7b-alpha": os.path.join(MODEL_PATH, "Starling-LM-7B-alpha"),
     # NOTE: https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0
     "solar-10.7b-instruct-v1.0": os.path.join(MODEL_PATH, "SOLAR-10.7B-Instruct-v1.0"),
+    # NOTE: https://huggingface.co/Intel/neural-chat-7b-v3-1
+    "neural-chat-7b-v3-1": os.path.join(MODEL_PATH, "neural-chat-7b-v3-1"),
+    # NOTE: https://huggingface.co/FlagAlpha/Llama2-Chinese-7b-Chat
+    "llama2-chinese-7b-chat": os.path.join(MODEL_PATH, "Llama2-Chinese-7b-Chat"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-7B-V0.1
     "xwin-lm-7b-v0.1": os.path.join(MODEL_PATH, "Xwin-LM-7B-V0.1"),
     # https://huggingface.co/Xwin-LM/Xwin-LM-13B-V0.1
