@@ -356,12 +356,12 @@ class KnowledgeService:
         doc.chunk_size = len(chunk_docs)
         doc.gmt_modified = datetime.now()
         
-        # Create a DocumentSummaryRequest object with the necessary information
+        # Create a DocumentSummaryRequest object
         summary_request = DocumentSummaryRequest(doc_id=doc.id, model_name=CFG.LLM_MODEL, conv_uid='your_conv_uid')
-        loop = get_or_create_event_loop()
-        summary = loop.run_until_complete(self.document_summary(summary_request))
-        print("V-SHY summary", summary)
-        # Now, you have the summary and can assign it to doc.summary
+        # Use the custom executor to run the async function
+        executor = CFG.SYSTEM_APP.get_component(ComponentType.EXECUTOR_DEFAULT, ExecutorFactory).create()
+        future = executor.submit(asyncio.run, self.document_summary(summary_request))
+        print("V-SHY summary", future.result())
         # doc.summary = summary
         
         knowledge_document_dao.update_knowledge_document(doc)
