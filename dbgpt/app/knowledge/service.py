@@ -373,7 +373,7 @@ class KnowledgeService:
             language=CFG.LANGUAGE,
             chunk_parameters=chunk_parameters,
         )
-        summary = executor_summary.submit(assembler.generate_summary, assembler, chunk_docs, doc)
+        summary = executor_summary.submit(assembler.generate_summary)
         print(summary)
         # doc.summary = summary
         

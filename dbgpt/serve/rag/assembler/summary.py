@@ -100,6 +100,7 @@ class SummaryAssembler(BaseAssembler):
 
     async def generate_summary(self) -> str:
         """Generate summary."""
+        print("generate_summary")
         return await self._extractor.aextract(self._chunks)
 
     def persist(self) -> List[str]:

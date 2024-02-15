@@ -26,6 +26,7 @@ class Extractor(ABC):
         Args:
             chunks (List[Chunk]): extract metadata from chunks
         """
+        print("aextract", chunks)
         return await self._aextract(chunks)
 
     @abstractmethod

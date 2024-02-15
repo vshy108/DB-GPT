@@ -73,6 +73,7 @@ class SummaryExtractor(Extractor):
             - model_name: str
             - chunk_docs: List[Document]
         """
+        print("_aextract")
         texts = [doc.content for doc in chunks]
         from dbgpt.util.prompt_util import PromptHelper
 
