@@ -356,28 +356,32 @@ class KnowledgeService:
         doc.chunk_size = len(chunk_docs)
         doc.gmt_modified = datetime.now()
         
-        from dbgpt.model.cluster import WorkerManagerFactory
-
-        worker_manager = CFG.SYSTEM_APP.get_component(
-            ComponentType.WORKER_MANAGER_FACTORY, WorkerManagerFactory
-        ).create()
-        chunk_parameters = ChunkParameters(
-            chunk_strategy="CHUNK_BY_SIZE",
-            chunk_size=CFG.KNOWLEDGE_CHUNK_SIZE,
-            chunk_overlap=CFG.KNOWLEDGE_CHUNK_OVERLAP,
-        )
-        assembler_summary = SummaryAssembler(
-            knowledge=knowledge,
-            model_name=CFG.LLM_MODEL,
-            llm_client=DefaultLLMClient(
-                worker_manager=worker_manager, auto_convert_message=True
-            ),
-            language=CFG.LANGUAGE,
-            chunk_parameters=chunk_parameters,
-        )
-        summary = await assembler_summary.generate_summary()
-        print("V-SHY summary", summary)
-        # doc.summary = summary
+        # TODO: First knowledge space creation causes 
+        # document sync error Could not connect to tenant default_tenant. Are you sure it exists?
+        if doc.summary is None:
+            from dbgpt.model.cluster import WorkerManagerFactory
+            worker_manager = CFG.SYSTEM_APP.get_component(
+                ComponentType.WORKER_MANAGER_FACTORY, WorkerManagerFactory
+            ).create()
+            chunk_parameters = ChunkParameters(
+                chunk_strategy="CHUNK_BY_SIZE",
+                chunk_size=CFG.KNOWLEDGE_CHUNK_SIZE,
+                chunk_overlap=CFG.KNOWLEDGE_CHUNK_OVERLAP,
+            )
+            assembler_summary = SummaryAssembler(
+                knowledge=knowledge,
+                model_name=CFG.LLM_MODEL,
+                llm_client=DefaultLLMClient(
+                    worker_manager=worker_manager, auto_convert_message=True
+                ),
+                language=CFG.LANGUAGE,
+                chunk_parameters=chunk_parameters,
+            )
+            summary = await assembler_summary.generate_summary()
+            print("V-SHY summary", summary)
+            doc.summary = summary
+        else:
+            print("V-SHY existing summary", doc.summary)
         
         knowledge_document_dao.update_knowledge_document(doc)
         executor = CFG.SYSTEM_APP.get_component(
