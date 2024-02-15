@@ -380,6 +380,11 @@ class KnowledgeService:
             summary = await assembler_summary.generate_summary()
             print("V-SHY summary", summary)
             doc.summary = summary
+            
+            if doc.chunk_size != 0:
+                new_chunk = Chunk(content=summary, metadata=chunk_docs[0].metadata)
+                chunk_docs.append(new_chunk)
+                doc.chunk_size += 1
         else:
             print("V-SHY existing summary", doc.summary)
         
@@ -387,6 +392,7 @@ class KnowledgeService:
         executor = CFG.SYSTEM_APP.get_component(
             ComponentType.EXECUTOR_DEFAULT, ExecutorFactory
         ).create()
+        print(chunk_docs)
         executor.submit(self.async_doc_embedding, assembler, chunk_docs, doc)
         logger.info(f"begin save document chunks, doc:{doc.doc_name}")
         return chunk_docs
