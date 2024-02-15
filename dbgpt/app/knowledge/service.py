@@ -44,6 +44,7 @@ from dbgpt.serve.rag.assembler.summary import SummaryAssembler
 from dbgpt.storage.vector_store.base import VectorStoreConfig
 from dbgpt.storage.vector_store.connector import VectorStoreConnector
 from dbgpt.util.executor_utils import ExecutorFactory, blocking_func_to_async
+from dbgpt.util.utils import get_or_create_event_loop
 
 knowledge_space_dao = KnowledgeSpaceDao()
 knowledge_document_dao = KnowledgeDocumentDao()
@@ -357,20 +358,8 @@ class KnowledgeService:
         
         # Create a DocumentSummaryRequest object with the necessary information
         summary_request = DocumentSummaryRequest(doc_id=doc.id, model_name=CFG.LLM_MODEL, conv_uid='your_conv_uid')
-
-        # Check if there's a running event loop
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:  # If there is no running event loop
-            loop = None
-
-        if loop and loop.is_running():
-            # If the event loop is running, use `create_task` or `run_until_complete`
-            summary = loop.run_until_complete(self.document_summary(summary_request))
-        else:
-            # If there is no running event loop, use `asyncio.run()`
-            summary = asyncio.run(self.document_summary(summary_request))
-
+        loop = get_or_create_event_loop()
+        summary = loop.run_until_complete(self.document_summary(summary_request))
         print("V-SHY summary", summary)
         # Now, you have the summary and can assign it to doc.summary
         # doc.summary = summary
