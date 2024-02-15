@@ -353,6 +353,30 @@ class KnowledgeService:
         doc.status = SyncStatus.RUNNING.name
         doc.chunk_size = len(chunk_docs)
         doc.gmt_modified = datetime.now()
+        
+        # from dbgpt.model.cluster import WorkerManagerFactory
+        # worker_manager = CFG.SYSTEM_APP.get_component(
+        #     ComponentType.WORKER_MANAGER_FACTORY, WorkerManagerFactory
+        # ).create()
+        executor_summary = CFG.SYSTEM_APP.get_component(
+            ComponentType.EXECUTOR_DEFAULT, ExecutorFactory
+        ).create()
+        assembler = SummaryAssembler(
+            knowledge=knowledge,
+            model_name=CFG.LLM_MODEL,
+            # llm_client=DefaultLLMClient(
+            #     worker_manager=worker_manager, auto_convert_message=True
+            # ),
+            llm_client=DefaultLLMClient(
+                worker_manager=executor_summary, auto_convert_message=True
+            ),
+            language=CFG.LANGUAGE,
+            chunk_parameters=chunk_parameters,
+        )
+        summary = executor_summary.submit(assembler.generate_summary, assembler, chunk_docs, doc)
+        print(summary)
+        # doc.summary = summary
+        
         knowledge_document_dao.update_knowledge_document(doc)
         executor = CFG.SYSTEM_APP.get_component(
             ComponentType.EXECUTOR_DEFAULT, ExecutorFactory

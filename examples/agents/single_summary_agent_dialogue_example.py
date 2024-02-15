@@ -16,6 +16,10 @@
 
 import asyncio
 import os
+import sys
+
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(ROOT_PATH)
 
 from dbgpt.agent.agents.agent import AgentContext
 from dbgpt.agent.agents.expand.summary_assistant_agent import SummaryAssistantAgent
