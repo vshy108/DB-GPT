@@ -290,6 +290,6 @@ wsproto==1.2.0
 XlsxWriter==3.1.9
 yarl==1.9.4
 youtube-transcript-api==0.6.2
-zh-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.5.0/zh_core_web_sm-3.5.0-py3-none-any.whl#sha256=50ec664cef64a095dd9ec7b9a1dba76814db10d72e4024249f9105ace8cb5ffa
+zh-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.7.0/zh_core_web_sm-3.7.0-py3-none-any.whl#sha256=f51075665749e07406d629d1055ce5a68635fae6ab3c34257ee798c62b4fc431
 zhipuai==1.0.7
 zipp==3.17.0
