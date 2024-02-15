@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 from datetime import datetime
@@ -354,27 +355,24 @@ class KnowledgeService:
         doc.chunk_size = len(chunk_docs)
         doc.gmt_modified = datetime.now()
         
-        # from dbgpt.model.cluster import WorkerManagerFactory
-        # worker_manager = CFG.SYSTEM_APP.get_component(
-        #     ComponentType.WORKER_MANAGER_FACTORY, WorkerManagerFactory
-        # ).create()
-        executor_summary = CFG.SYSTEM_APP.get_component(
-            ComponentType.EXECUTOR_DEFAULT, ExecutorFactory
-        ).create()
-        assembler = SummaryAssembler(
-            knowledge=knowledge,
-            model_name=CFG.LLM_MODEL,
-            # llm_client=DefaultLLMClient(
-            #     worker_manager=worker_manager, auto_convert_message=True
-            # ),
-            llm_client=DefaultLLMClient(
-                worker_manager=executor_summary, auto_convert_message=True
-            ),
-            language=CFG.LANGUAGE,
-            chunk_parameters=chunk_parameters,
-        )
-        summary = executor_summary.submit(assembler.generate_summary)
-        print(summary)
+        # Create a DocumentSummaryRequest object with the necessary information
+        summary_request = DocumentSummaryRequest(doc_id=doc.id, model_name=CFG.LLM_MODEL, conv_uid='your_conv_uid')
+
+        # Check if there's a running event loop
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:  # If there is no running event loop
+            loop = None
+
+        if loop and loop.is_running():
+            # If the event loop is running, use `create_task` or `run_until_complete`
+            summary = loop.run_until_complete(self.document_summary(summary_request))
+        else:
+            # If there is no running event loop, use `asyncio.run()`
+            summary = asyncio.run(self.document_summary(summary_request))
+
+        print("V-SHY summary", summary)
+        # Now, you have the summary and can assign it to doc.summary
         # doc.summary = summary
         
         knowledge_document_dao.update_knowledge_document(doc)
