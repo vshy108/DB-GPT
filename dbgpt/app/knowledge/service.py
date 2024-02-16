@@ -241,7 +241,7 @@ class KnowledgeService:
             doc_ids.append(doc.id)
         return doc_ids
 
-    async def sync_knowledge_document(self, space_name, sync_request: DocumentSyncRequest):
+    def sync_knowledge_document(self, space_name, sync_request: DocumentSyncRequest):
         """sync knowledge document chunk into vector store
         Args:
             - space: Knowledge Space Name
@@ -319,10 +319,10 @@ class KnowledgeService:
                     text_splitter_impl=text_splitter,
                 )
                 chunk_parameters.text_splitter = text_splitter
-            await self._sync_knowledge_document(space_name, doc, chunk_parameters)
+            self._sync_knowledge_document(space_name, doc, chunk_parameters)
         return doc.id
 
-    async def _sync_knowledge_document(
+    def _sync_knowledge_document(
         self,
         space_name,
         doc: KnowledgeDocumentEntity,
@@ -356,37 +356,32 @@ class KnowledgeService:
         doc.chunk_size = len(chunk_docs)
         doc.gmt_modified = datetime.now()
         
-        # TODO: First knowledge space creation causes 
-        # document sync error Could not connect to tenant default_tenant. Are you sure it exists?
-        if doc.summary is None:
-            from dbgpt.model.cluster import WorkerManagerFactory
-            worker_manager = CFG.SYSTEM_APP.get_component(
-                ComponentType.WORKER_MANAGER_FACTORY, WorkerManagerFactory
-            ).create()
-            chunk_parameters = ChunkParameters(
-                chunk_strategy="CHUNK_BY_SIZE",
-                chunk_size=CFG.KNOWLEDGE_CHUNK_SIZE,
-                chunk_overlap=CFG.KNOWLEDGE_CHUNK_OVERLAP,
-            )
-            assembler_summary = SummaryAssembler(
-                knowledge=knowledge,
-                model_name=CFG.LLM_MODEL,
-                llm_client=DefaultLLMClient(
-                    worker_manager=worker_manager, auto_convert_message=True
-                ),
-                language=CFG.LANGUAGE,
-                chunk_parameters=chunk_parameters,
-            )
-            summary = await assembler_summary.generate_summary()
-            print("V-SHY summary", summary)
-            doc.summary = summary
+        # if doc.summary is None:
+        #     from dbgpt.model.cluster import WorkerManagerFactory
+        #     worker_manager = CFG.SYSTEM_APP.get_component(
+        #         ComponentType.WORKER_MANAGER_FACTORY, WorkerManagerFactory
+        #     ).create()
+        #     chunk_parameters = ChunkParameters(
+        #         chunk_strategy="CHUNK_BY_SIZE",
+        #         chunk_size=CFG.KNOWLEDGE_CHUNK_SIZE,
+        #         chunk_overlap=CFG.KNOWLEDGE_CHUNK_OVERLAP,
+        #     )
+        #     assembler_summary = SummaryAssembler(
+        #         knowledge=knowledge,
+        #         model_name=CFG.LLM_MODEL,
+        #         llm_client=DefaultLLMClient(
+        #             worker_manager=worker_manager, auto_convert_message=True
+        #         ),
+        #         language=CFG.LANGUAGE,
+        #         chunk_parameters=chunk_parameters,
+        #     )
+        #     summary = await assembler_summary.generate_summary()
+        #     doc.summary = summary
             
-            if doc.chunk_size != 0:
-                new_chunk = Chunk(content=summary, metadata=chunk_docs[0].metadata)
-                chunk_docs.append(new_chunk)
-                doc.chunk_size += 1
-        else:
-            print("V-SHY existing summary", doc.summary)
+        #     if doc.chunk_size != 0:
+        #         new_chunk = Chunk(content=summary, metadata=chunk_docs[0].metadata)
+        #         chunk_docs.append(new_chunk)
+        #         doc.chunk_size += 1
         
         knowledge_document_dao.update_knowledge_document(doc)
         executor = CFG.SYSTEM_APP.get_component(
